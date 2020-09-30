@@ -1,0 +1,13 @@
+#!/bin/bash
+#TODO duplicate?
+if ! _:ginger_bin dd ; then return 1; fi
+
+function dropcaches()
+{
+	cat << EOF
+	> | while not causing harm, use of this function is depreciated
+	> | outside debugging environemnt or special cases!
+EOF
+	echo dropping caches
+	echo 3 | sudo dd of=/proc/sys/vm/drop_caches status=none
+}

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+if ! _:ginger_bin grep ; then return 1; fi
+
+function filterComments()
+{
+	grep -viP '^(\s|\t)*(#)' "${1}"
+}
+
+

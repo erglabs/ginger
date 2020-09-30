@@ -1,0 +1,23 @@
+#TODOS general
+
+module blacklist
+module statistics
+module whitelist
+module configuration
+os detection (??)
+
+
+* samba:
+* mount -t cifs //server/share /mnt --verbose -o user=username
+* add more .gig integrators in projects page
+* if this is debian, and root, ask for sysinit
+* if sysinit install recomended packages
+* templates 4 tempfs
+* generate apt list | comm -23 <(apt-mark showmanual | sort -u) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u)
+
+ssh agent - watch logged suers to determine whenever we should kill remaining agents (who?)
+
+* preconfig versioning maybe?
+
+autoversioning?
+autochangelogs?

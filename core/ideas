@@ -1,0 +1,28 @@
+curl ifconfig.me
+man ascii
+dd if=/dev/dsp | ssh -c arcfour -C username@host dd of=/dev/dsp
+wget --random-wait -r -p -e robots=off -U mozilla http://www.example.com
+apt-file #whatprocides
+whohas
+whois
+who
+write
+sysstat # sar sadc sa sa1 sa2 sadf iostat mpstat pidstat nfsiostat cifsiostat
+
+nmon
+htop
+clex
+tcpflow
+tcpick
+netcat
+
+
+
+git log --graph --oneline --abbrev-commit
+pantheon-terminal terminology terminology-data
+iterm2
+#!/bin/bash
+
+# go to start char:  echo -e "\033[1;25r"
+# reset console char : echo -e \\033c
+

@@ -1,0 +1,271 @@
+#!/usr/bin/env bash
+#no special prerequisites
+
+#TODO: backup
+#TODO: remove
+#TODO: proper return codes
+
+########################
+# CONSTANTS
+########################
+
+KV_USER_DIR="${GINGER_HOME}/.ginger/data/db"
+
+mkdir -p ${KV_USER_DIR}
+if [[ ! -f ${KV_USER_DIR}/gcfg ]]
+then
+    touch ${KV_USER_DIR}/gcfg
+fi
+
+# validator
+# [[ "${1}" =~ ^[0-9a-zA-Z._:-]+$ ]]
+
+
+########################
+# ENSURE THIS-FILE IS CALL BY 'source ./kvsh.gig'
+########################
+
+[[ "${BASH_SOURCE[0]}" != "${0}" ]] ||
+{
+    _:gmt_warn_n '[KVSH]' ' you can not use it without sourcing [> source kvsh.gig]'
+    exit 1
+}
+
+########################
+# internals here:
+########################
+_:g_kvsh-remove()
+{
+    IFS=$'\n'
+    report=""
+    
+    if [[ ${#} -ge 1 ]] ; then
+        for NAMESPACE in ${@} ; do
+            if [[ ! -f ${KV_USER_DIR}/${NAMESPACE} ]] ; then
+                _:gmt_info_n '[KVSH]' ' requested namespace ${NAMESPACE} do not exist and will not be removed'
+            else
+                [[ -r ${KV_USER_DIR}/${NAMESPACE} ]] && rm -rf ${KV_USER_DIR}/${NAMESPACE}
+                _:gmt_info_n '[KVSH]' "removed ${NAMESPACE}"
+            fi
+        done
+    fi
+    if [[ ${#} -eq 0 ]] ; then
+        _:gmt_warn_n '[KVSH]' "no db namespaces provided"
+        return 1;
+    fi
+}
+
+_:g_kvsh-clear()
+{
+    if [[ ${#} -eq 2 ]] ; then
+        NAMESPACE=${1}; shift
+        KEY=${1}; shift
+    else
+        _:gmt_info_n '[KVSH]' 'i need namespace and  eitehr key or :all keyword, exactly 2 args'
+        return 1;
+    fi
+
+    if [[ "${KEY}" == ":all" ]] ; then
+        _:g_kvsh-remove "${NAMESPACE}"
+        return 0
+    fi
+
+    if [[ ! -f ${KV_USER_DIR}/${NAMESPACE} ]]
+    then
+        _:gmt_info_n '[KVSH]' 'namespace does not exist'
+    else
+        grep "^${KEY}|" ${KV_USER_DIR}/${NAMESPACE} > /dev/null
+        if [[ $? -eq 0 ]] ; then
+            sed -i "/^${KEY}|/d" ${KV_USER_DIR}/${NAMESPACE}
+        fi
+    fi
+    return 0
+}
+
+_:g_kvsh-list()
+{
+    IFS=$'\n'
+    report=""
+    
+    if [[ ${#} -ge 1 ]] ; then
+        for NAMESPACE in ${@} ; do
+            if [[ ! -f ${KV_USER_DIR}/${NAMESPACE} ]] ; then
+                _:gmt_info_n '[KVSH]' "requested namespace ${NAMESPACE} do not exist and wont be listed"
+            else
+                for LINE in $(cat ${KV_USER_DIR}/${NAMESPACE}) ; do
+                    report=$(echo "${report}\n${LINE}\n")
+                done
+		echo -ne "${report}" | column -s '|' -t
+            fi
+        done
+    fi
+    if [[ ${#} -eq 0 ]] ; then
+        if [[ $(find ${KV_USER_DIR} -type f | wc -l ) -ne 0 ]]; then
+            for NAMESPACE in $( echo ${KV_USER_DIR}/* ) ; do
+                _:gmt_info_n '[KVSH]' "listing ${NAMESPACE} ..."
+                for LINE in $(cat ${NAMESPACE}) ; do
+                    report=$(echo "${report}\n${LINE}\n")
+                done
+		echo -ne "${report}" | column -s '|' -t
+            done
+        else
+            _:gmt_warn_n '[KVSH]' 'no db namespaces present'
+        fi
+    fi
+}
+
+_:g_kvsh-source()
+{
+    # function specifically deployed to read and source database kv files
+    # provided or managed by ginger
+    # there will be provided special function to mark namespace as loadable
+    # for now only namespace gcfg will be loaded automatically
+    
+    if [[ $# -eq 0 ]]
+    then
+        NAMESPACE="gcfg"
+        KEY=${2}
+    else return 1;
+    fi
+
+    for line in $( cat ${KV_USER_DIR}/${NAMESPACE} )
+    do                                                                         
+	echo $line
+        KEY=$(echo "${line}" | cut -d '|' -f -1)
+	VALUE=$(echo "${line}" | cut -d '|' -f 2-)
+	echo $KEY
+	echo $VALUE
+        export ${KEY}="${VALUE}"
+    done
+    return 0;
+}
+
+_:g_kvsh-get()
+{
+    if [[ $# -eq 2 ]]
+    then
+        NAMESPACE=${1}
+        KEY=${2}
+    else
+        _:gmt_warn_n '[KVSH]' "i need exactly two arguments"
+    fi
+
+    if [[ -f ${KV_USER_DIR}/${NAMESPACE} ]]
+    then
+        # value is under cut -1
+        VALUE=$(grep "^${KEY}|" ${KV_USER_DIR}/${NAMESPACE} | cut -d '|' -f 2-)
+        if [[ $? -eq 1 ]] ; then return 1 ; fi
+	echo "${VALUE}"
+        return 0
+    else
+        _:gmt_info_n '[KVSH]' ' no such namespace!'
+        return 1
+    fi
+}
+
+_:g_kvsh-addnamespace()
+{
+    if [[ $# -ge 2 ]]
+    then
+        : >> ${1}/${2}
+    fi
+}
+
+_:g_kvsh-set()
+{
+    if [[ ${#} -ge 3 ]] ; then
+        NAMESPACE=${1}; shift
+        KEY=${1}; shift
+        VALUE="$@"
+    else
+        _:gmt_info_n '[KVSH]' ' i need namespace, key and value, at least 3 args'
+        return 1;
+    fi
+
+    if [[ ! -f ${KV_USER_DIR}/${NAMESPACE} ]]
+    then
+        _:g_kvsh-addnamespace ${KV_USER_DIR} ${NAMESPACE}
+    else
+	grep "^${KEY}|" ${KV_USER_DIR}/${NAMESPACE} > /dev/null
+	if [[ $? -eq 0 ]] ; then
+	    sed -i "/^${KEY}|/d" ${KV_USER_DIR}/${NAMESPACE}
+	fi
+    fi
+
+    echo -e "${KEY}|${VALUE}" >> ${KV_USER_DIR}/${NAMESPACE}
+    return 0
+}
+
+
+_:g_kvsh-usage() {
+    _:gmt_info_n "KVSH"  'usage :'
+    _:gmt_info_n "KVSH"  'kvsh <set>    [namespace] [key] [value(s)]'
+    _:gmt_info_n "KVSH"  'kvsh <get>    [namespace] [key]'
+    _:gmt_info_n "KVSH"  'kvsh <rm>     [namespace] '
+    _:gmt_info_n "KVSH"  'kvsh <CLEAR>  [namespace] [opt:key|all]'
+    _:gmt_info_n "KVSH"  'kvsh <list>   [opt:namespace|all:empty] [opt:key|all:empy]'
+
+    _:gmt_info_n "KVSH" " examples"
+    _:gmt_info_n "KVSH" ' kvsh set default key "some value with spaces"'
+    _:gmt_info_n "KVSH" ' kvsh get default word_key'
+    _:gmt_info_n "KVSH" ' kvsh set default MY_PID ${BASH_SUBSTITUTION_RESULT_WTHOUT_SPACES}'
+    _:gmt_info_n "KVSH" ' kvsh set test f_result "$(BASH_SUBSHELL_RESULT_WTH_SPACES)"'
+    _:gmt_info_n "KVSH" " namespaces are files saved to ${KV_USER_DIR}"
+    _:gmt_info_n "KVSH" " key-values are one-liner records in specific namespaces"
+    _:gmt_info_n "KVSH" " files are owned and should be used on per user basis"
+}
+
+###################
+# PUBLIC
+###################
+
+function kvsh()
+{
+    operation=${1} ; shift
+    if [[ ! -z "${1}" ]] ; then A="${1}" ; shift ; fi
+    if [[ ! -z "${1}" ]] ; then B="${1}" ; shift ; fi
+    if [[ ! -z "${1}" ]] ; then C="${@}" ; shift ; fi
+    #debug:
+    #echo ${operation}
+    #echo ${A}
+    #echo ${B}
+    #echo ${C}
+    if [[ ! "${A}" =~ ^[0-9a-zA-Z._:-]+$ ]] ; then
+        _:gmt_info_n '[KVSH]' ' namespaces are files, naming convention apply (no weird symbols there)'
+        return 9
+    fi
+
+    case ${operation} in
+    "get")
+        _:g_kvsh-get "${A}" "${B}"
+      ;;
+    "set")
+        _:g_kvsh-set "${A}" "${B}" "${C}"
+      ;;
+    "rm")
+         _:g_kvsh-remove "${A}" "${B}" "${C}"
+      ;;
+    "list")
+         _:g_kvsh-list "${A}" 
+      ;;
+    *"help")
+	
+        _:g_kvsh-usage
+      ;;
+    *"clear")
+        _:g_kvsh-clear "${A}" "${B}"
+      ;;
+    *)
+
+        _:g_kvsh-usage
+      ;;
+    esac
+}
+
+_:g_kvsh-source
+
+#more aliases for scripting
+function kv_s() {  _:g_kvsh-set $@ ; }
+function kv_g() {  _:g_kvsh-get $@ ; }
+function kv_l() {  _:g_kvsh-list $@ ; }
+function kv_r() {  _:g_kvsh-remove $@ ; }

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if ! _:ginger_bin gpg ; then return 1; fi
+
+#todo do the same as with ssh module
+
+gpginit()
+{
+    export GPG_TTY=$(tty);
+    export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
+    gpg-connect-agent updatestartuptty /bye
+}

@@ -1,0 +1,47 @@
+#!/bin/bash
+if ! _:ginger_package rsync ; then return 1; fi
+if ! _:ginger_package ssh-client ; then return 1; fi
+if ! _:ginger_package task-spooler ; then return 1; fi
+if ! _:ginger_bin /usr/bin/sha1sum ; then return 1; fi
+
+note()
+{
+	EDITOR=nano
+	IAM=$(id -un)
+	LPATH=$HOME/.ginger/notes
+	RPATH=/cargo/sync/${IAM}/.ginger/notes
+	SERVER=dthw #take from ssh's config file per user
+	SSHCONFIG=${HOME}/.ssh/config
+	SSHKEY=${HOME}/.ssh/dthw-net
+	SSHBIN=/usr/bin/ssh
+	RSYNCBIN=/usr/bin/rsync
+	RSYNCFLAG="-rtuq"
+	RSYNCOPT=-rsync-path="mkdir -p ${RPATH} && rsync"
+
+	if [ "$#" -lt 1 ]
+	then
+		echo "Illegal number of parameters"
+		echo ' note <name> <options> '
+	fi
+
+	if [ -d ${LPATH} ]
+	then
+		if [ -f ${LPATH}/$1 ]
+		then
+			CHECKBEFORE=$(sha1sum ${LPATH}/$1)
+		else
+			CHECKBEFORE="BEFORENULL"
+		fi
+		$EDITOR ${LPATH}/$1
+	else
+		mkdir ${LPATH}
+		CHECKBEFORE="BEFORENULL"
+		$EDITOR $HOME/${LPATH}/$1
+	fi
+	CHECKAFTER=$(sha1sum ${LPATH}/$1)
+	if [ "$CHECKAFTER" != "$CHECKBEFORE" ]
+	then
+		nohup 	${RSYNCBIN} ${RSYNCFLAG} -e "${SSHBIN} -F ${SSHCONFIG} -i ${SSHKEY}" $LPATH ${RSYNCOPT} $SERVER:$RPATH 	&&
+			${RSYNCBIN} ${RSYNCFLAG} -e "${SSHBIN} -F ${SSHCONFIG} -i ${SSHKEY}" $SERVER:$RPATH $LPATH   &>/dev/null &
+	fi
+}

@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# disallow loading twice
+if [[ $GINGER_READY -eq 1 ]]; then echo ginger ready; return; fi
+GINGER_READY=1
+
+# check whenever shell is interactive,
+# dont throw bunch of code to, i.e. rsync or scp
+# last changes make so we just stop loading ginger on non interactive shells
+    if [[ -z "$PS1" ]]; then
+        GINGER_SHELL_INTERACTIVE=1
+    else
+        GINGER_SHELL_INTERACTIVE=0
+    fi
+
+    case "$-" in
+        *i*)	GINGER_SHELL_INTERACTIVE=1 ;;
+        *)	GINGER_SHELL_INTERACTIVE=0 ;;
+    esac
+    if [[ GINGER_SHELL_INTERACTIVE -eq 0 ]] ; then return 0 ; fi
+
+# some declarations first
+    declare -a GINGER_LOAD_SUCCESSFUL
+    GINGER_LOAD_SUCCESSFULL_N=0
+
+    declare -a GINGER_LOAD_FAILED
+    declare -a GIGNER_LOAD_FAILED_REASON
+    GINGER_LOAD_FAILED_N=0
+
+# now we must load those modules out of order
+    declare -a __OOL_LIST
+    __OOL_LIST[0]="${GINGER_HOME}/.ginger/core/intro/ginger_farsight.gig"
+    __OOL_LIST[1]="${GINGER_HOME}/.ginger/core/intro/ginger_tag.gig"
+    __OOL_LIST[2]="${GINGER_HOME}/.ginger/core/intro/ginger_assert.gig"
+
+    #differs lightly from other loading loop
+    for file in ${__OOL_LIST[@]} ; do
+	    if source $file 2>/dev/null 1>&2 ; then
+		    GINGER_LOAD_SUCCESSFUL[${GINGER_LOAD_SUCCESSFUL_N}]="[GINGER][!OK!] sourcing $(basename ${file}) ... ::"
+			GINGER_LOAD_SUCCESSFUL_N=$((GINGER_LOAD_SUCCESSFUL_N + 1))
+		else
+	        GINGER_LOAD_FAILED[${GINGER_LOAD_FAILED_N}]="[GINGER][ERR!] sourcing $(basename ${file}) ... ::"
+	        GINGER_LOAD_FAILED_REASON[${GINGER_LOAD_FAILED_N}]=$(source ${file})
+			GINGER_LOAD_FAILED_N=$((GINGER_LOAD_FAILED_N + 1))
+		fi
+	done
+    unset __OOL_LIST
+
+
+## prepare to load rest of functionalities:
+
+    for dir in $( /bin/ls -d ${GINGER_HOME}/.ginger/core/*/); do
+	#find if there are anything to load in directory
+	    [[ $(find $dir -name "*.gig" | wc -l ) -eq 0 ]] && continue;
+
+	# load everything with .gig extension
+	    for file in $(echo ${dir}*.gig) ; do
+	    # sourcing not working inside parenthesis
+		    if source $file 2>/dev/null 1>&2 ; then
+		   	    GINGER_LOAD_SUCCESSFUL[${GINGER_LOAD_SUCCESSFUL_N}]="$(_:gt_success) sourcing $(basename ${file}) ... ::"
+			    GINGER_LOAD_SUCCESSFUL_N=$((GINGER_LOAD_SUCCESSFUL_N + 1))
+		    else
+		        GINGER_LOAD_FAILED[${GINGER_LOAD_FAILED_N}]="$(_:gt_error) sourcing $(basename ${file}) ... ::"
+		        GINGER_LOAD_FAILED_REASON[${GINGER_LOAD_FAILED_N}]=$(source ${file})
+			    GINGER_LOAD_FAILED_N=$((GINGER_LOAD_FAILED_N + 1))
+		    fi
+	    done
+    done
+
+    #postload: just print loading stats
+    if [[ ${GINGER_LOAD_SUCCESSFUL_N} -gt 0 ]] ; then
+        _:gt_success_n "successfully loaded ${GINGER_LOAD_SUCCESSFUL_N} modules" 1>&2
+    fi
+    if [[ ${GINGER_LOAD_FAILED_N} -gt 0 ]] ; then
+        _:gt_error_n "failed to load ${GINGER_LOAD_FAILED_N} modules" 1>&2
+    fi
+
+#GINGER_DBREAD=${GINGER_HOME/databases/.gdb.src}
+    alias ginger_show_failed_modules='i=0 ; while [[ ${GINGER_LOAD_FAILED_N} -ne i ]] ; do echo ${GINGER_LOAD_FAILED[${i}]}; i=$((i+1)) ; done'

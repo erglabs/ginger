@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#TODO docs
+
+drawbar()
+{
+        WIDTH=$(($(tput cols)-2))
+        TODRAW=$( echo | awk "{print int( $WIDTH *  ($1 / $2)  ) }" )
+        NODRAW=$((WIDTH-TODRAW))
+        echo -ne '{'
+        for i in $(seq 1 "$TODRAW")
+        do
+                echo -ne '#'
+        done
+        for i in $(seq 1 "$NODRAW")
+        do
+                echo -ne '-'
+        done
+        echo -e '}'
+}

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# todo
+# two way sync
+# scp supplements
+
+cpy()
+{
+    rsync -rthcP "${1}" "${2}"
+}
+
+cpyf()
+{
+    rsync -rthP "${1}" "${2}"
+}
+
+cpyd()
+{
+    if [[ -z ${GINGER_DEF_CPYBACKUP} ]] ; then
+    	echo "i dont know where to backup"
+	   echo "GINGER_DEF_CPYBACKUP is EMPTY"
+	return 22
+    fi
+    if [[ -d ${GINGER_DEF_CPYBACKUP} ]] ; then
+	   echo "i cant do backup"
+	   echo "${GINGER_DEF_CPYBACKUP} does not exist"
+	return 23
+    fi
+    rsync -rthcP "${1}" "${GINGER_DEF_CPYBACKUP}"
+    return 0
+}

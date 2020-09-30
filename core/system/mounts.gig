@@ -1,0 +1,73 @@
+#!/bin/bash
+
+if ! _:ginger_bin mount ; then return 1; fi
+
+cmount()
+{
+    SWITCH="${1}"
+    MNAME="${2}"
+    DNAME="${3}"
+
+
+    UUID=$(id -u)
+    GUID=$(id -g)
+    if [[ "${UUID}" -eq 0 ]]
+    then
+       echo UUID=${UUID}
+       echo UUID=${UGID}
+       echo 'please do not call this script as root (sudo?)';
+       return 6
+    fi
+
+    if [[ "${SWITCH}" == "-o" ]]
+    then
+      if [[ ! -b "${DNAME}" ]] && [[ ! -f "${DNAME}" ]]
+      then
+        echo 'device does not exist?'
+        echo 'cname [switch] [mount name] [dev name]'
+        return 4
+      fi
+
+      if [[ ! -b /dev/mapper/${MNAME} ]]
+      then
+        sudo cryptsetup open "${DNAME}" "${MNAME}"
+      else
+        echo 'this device already exist, choose different mount name'
+      fi
+
+      sudo mkdir -p "/mnt/${MNAME}"
+      sudo chown esavier "/mnt/${MNAME}"
+      sudo mount "/dev/mapper/${MNAME}" "/mnt/${MNAME}"
+      return 0
+    fi
+
+    if [[ "${SWITCH}" == "-c" ]]
+    then
+      if [[ -z "$MNAME" ]]
+      then
+        echo ' i need at least mount name!'
+        return 5
+      fi
+
+      if [[ -b "/dev/mapper/${MNAME}" ]]
+      then
+        sudo cryptsetup close "${MNAME}"
+      else
+        echo ' nothing to close'
+      fi
+
+      if [[ -d "/mnt/${MNAME}" ]]
+      then
+        sudo umount "/mnt/${MNAME}" &> /dev/null
+        sudo rmdir "/mnt/${MNAME}" &> /dev/null
+      else
+        echo ' nothing to unmount?'
+      fi
+
+
+      return 0
+    fi
+
+    echo no argument provided
+    return 1
+}

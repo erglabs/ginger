@@ -1,0 +1,13 @@
+#/bin/bash
+
+if ! _:ginger_bin xrandr ; then return 1; fi
+
+brightness()
+{
+	for each in $(xrandr -q | grep " connected" | cut -d ' ' -f 1)
+	do
+		xrandr --output $each --brightness 0.$1
+	done
+
+}
+

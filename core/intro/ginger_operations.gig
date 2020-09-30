@@ -1,0 +1,25 @@
+# need validators!
+
+_:varinc()
+{	# i will increase variable!
+	# expecting only one number input!
+
+	if [ $# -ne 1 ] ; then return 1; fi
+	var=$( _:varname $1 );
+	if [[ $var == "" ]] ; then return 1; fi;
+	eval $( echo $var $1 | awk '{print $2 "=$((" $1+1 "))"}') ; 
+}
+_:varinc()
+{	# i will increase variable!
+	# expecting only one number input!
+
+	if [ $# -ne 1 ] ; then return 1; fi
+	var=$( _:varname $1 );
+	if [[ $var == "" ]] ; then return 1; fi;
+	eval $( echo $var $1 | awk '{print $2 "=$((" $1-1 "))"}') ; 
+}
+
+_:varname()
+{	# give me string name of variable and i wil lget its content
+	eval echo $(echo '$'"$#")
+}

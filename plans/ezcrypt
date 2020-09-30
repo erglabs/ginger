@@ -1,0 +1,23 @@
+
+#BROKEN YETC
+return
+if ! _:ginger_require cryptsetup ; then return 1 ; fi
+return 0; #disabled for now
+
+#todo replaced by cmount?
+cryptdevice()
+{
+	validate()
+	{
+		if echo $1 | grep '/dev/' ; then return 0 ; fi
+		return 1;
+	}
+	echo -n '[GINGER][INFO] '
+	echo 'we require that crypted device will be in /dev/something, we will check it now for your safety'
+	if ! validate $1 ; then echo 'something weird, aborting' ; else echo ' seems ok, proceed'; fi
+	# later maybe some kind of label check? for now jsut cryptoswap-[number]
+	NAME="cryptofs${RANDOM}"
+	echo '[GINGER]'
+	cryptsetup open --type luks ${1} ${NAME}
+}
+	

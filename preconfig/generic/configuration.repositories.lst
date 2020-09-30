@@ -1,0 +1,10 @@
+git@bitbucket.org:deathware/netlink.git
+git@bitbucket.org:esavier/ginger.git
+git@bitbucket.org:deathware/sshconnect.git
+git@bitbucket.org:deathware/fileio.git
+https://github.com/tuhdo/emacs-c-ide-demo.git
+
+#optionals:
+https://github.com/tuhdo/tuhdo.github.io.git
+https://github.com/tuhdo/sample-os.git
+https://github.com/tuhdo/os01.git

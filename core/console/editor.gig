@@ -1,0 +1,34 @@
+#!/bin/bash
+
+function edit()
+{
+  editor=nano
+  user=$(whoami)
+
+  if [[ -d $1 ]]
+  then
+      echo "[Error] file is not normal file, or does not exit";
+    exit 1
+  fi
+
+  if [[ $(id -u) -eq 0 ]]
+  then
+    $editor $1
+  fi
+
+  if [[ -f $1 ]]
+  then
+    if [[ $(ls -l $1 | grep $(whoami)) ]] ; then owner=1 ; fi
+    if [[ $owner -eq 1 ]]
+    then
+      if [[ $(ls -l test | grep -P '\-rwx[-rwx]{6} ') ]] ; then $editor $1; return 0 ; fi
+    else
+      if [[ $(ls -l test | grep -P '\-[-rwx]{6}rwx ') ]] ; then $editor $1; return 0 ; fi
+    fi
+    sudo -l 1>/dev/null
+    if [[ $? -eq 0 ]] ; then sudo $editor $1; return 0; fi
+    echo "[Error] no permissions nor sudo rights, cant edit file!"
+    return 1
+  fi
+}
+

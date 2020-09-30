@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# simply execute setup scripts for all config dirs
+# each dir should register here and provide setup script 
+
+# grab currents scirpt's location
+# todo: add helper function to ginger
+
+# disabled for public release, enable if you want it
+MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# . ${MYDIR}/preconfig.nano.sh
+# . ${MYDIR}/preconfig.i3.sh
+# . ${MYDIR}/preconfig.rofi.sh
+

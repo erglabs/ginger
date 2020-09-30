@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if ! _:ginger_bin /bin/dd ; then return 1; fi
+if ! _:ginger_bin pv ; then return 1; fi
+
+ddmon()
+{
+# prototype " xxx if, of, 'flags' "
+#    or
+# prototype " xxx if, of, 'flagsin' 'flagsout' "
+# i.e.
+# ddmon if=asd of=asd2 bs=4M sync nofollow
+
+    INFILE=$1; shift
+    OUTFILE=$1; shift
+    FLAGS=$@
+    #echo ${INFFILE}
+    #echo ${OUTILE}
+    #echo ${FLAGS}
+    sudo dd if=${INFILE} ${FLAGS} 2>/dev/null | pv | sudo dd of=${OUTFILE} ${FLAGS} 2>/dev/null
+    return $?
+};

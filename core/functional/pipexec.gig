@@ -1,0 +1,6 @@
+pipexec() { 
+    while read -r filename
+    do
+	eval $@ "$filename"
+    done
+}

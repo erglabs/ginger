@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if ! _:ginger_bin avconv ; then return 1; fi
+
+#basically an example
+function _avtransform()
+{
+	for each in #@
+	do
+		if [ -f $each ]
+		then
+			avconv -i $each -codec copy "$(basename $each).mp4"
+		fi
+	done
+}

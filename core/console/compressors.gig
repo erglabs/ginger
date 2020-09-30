@@ -1,0 +1,34 @@
+#!/bin/bash
+
+! _:ginger_bin tar ; then return 1; fi
+
+#TODO
+# tar provides compressor implementation from not so long,
+# it allows to provide for example xz -T (threaded compressor) implementation
+# it would be, for example, standard pigz replacement
+
+archivecompress ()
+{
+    ARCHIVE="${1}" ; shift
+    FILES="${@}"
+    tar --checkpoint=64 --checkpoint-action=ttyout='%{%Y-%m-%d %H:%M:%S}t (%d sec): #%u, %T%*\r' -Jcf "${ARCHIVE}" "${FILES}"
+}
+
+archivedecompress ()
+{
+    ARCHIVE="${1}" ; shift
+    FILES="${@}"
+    tar --checkpoint=64 --checkpoint-action=ttyout='%{%Y-%m-%d %H:%M:%S}t (%d sec): #%u, %T%*\r' -Jxf "${ARCHIVE}" "${FILES}"
+}
+
+archivelist ()
+{
+    tar -Jtvf "${1}"
+}
+
+archivesolidify ()
+{
+    ARCHIVE="${1}" ; shift
+    FILES="${@}"
+    tar --checkpoint=64 --checkpoint-action=ttyout='%{%Y-%m-%d %H:%M:%S}t (%d sec): #%u, %T%*\r' -cf "${ARCHIVE}" "${FILES}"
+}

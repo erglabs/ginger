@@ -1,0 +1,1 @@
+apt install dkms linux-headers-amd64 linux-image-amd64 i3lock i3blocks i3status i3-wm i3 i3lock-fancy dbus-x11 xserver-xorg nvidia-driver gcc g++ build-essential make automake cmake terminator network-manager git tig emacs25-nox moc moc-ffmpeg-plugin lightdm ranger lfm rustc rust-doc cargo-doc rust-gdb rust-lldb ack rsync aria2 locate stat

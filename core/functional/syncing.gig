@@ -1,0 +1,55 @@
+#!/bin/bash
+
+if ! _:ginger_bin ssh ; then return 1; fi
+if ! _:ginger_bin rsync ; then return 1; fi
+return # disabled (unconfigured run is not permitted)
+
+_sync-push()
+{
+    RPATH=/cargo/sync/esavier
+    if [ $# -gt 1 ]
+    then
+        echo "one location please!"
+    fi
+
+    if [ ! -f $1 ] && [ ! -d $1 ]
+    then
+	echo this is not a file or directory
+    fi
+
+    LPATH=$(realpath $1)
+    RPATH=/ext/storage/$(whoami)/.ginger/notes
+	SERVER=my-server #take from ssh's config file per user
+	SSHCONFIG=${HOME}/.ssh/config
+	SSHKEY=${HOME}/.ssh/my-server.ed25519.ssh.priv
+	SSHBIN=/usr/bin/ssh
+	RSYNCBIN=/usr/bin/rsync
+	RSYNCFLAG="-rtuq"
+
+	nohup ${RSYNCBIN} ${RSYNCFLAG} -e "${SSHBIN} -F ${SSHCONFIG} -i ${SSHKEY}" $LPATH --rsync-path="mkdir -p ${RPATH} && rsync" $SERVER:$RPATH &
+}
+
+_sync-pull()
+{
+    RPATH=/cargo/sync/esavier
+    if [ $# -gt 1 ]
+    then
+        echo "one location please!"
+    fi
+
+    if [ ! -f $1 ] && [ ! -d $1 ]
+    then
+	echo this is not a file or directory
+    fi
+
+    LPATH=$(realpath $1)
+    RPATH=/ext/storage/$(whoami)/.ginger/notes
+	SERVER=my-server #take from ssh's config file per user
+	SSHCONFIG=${HOME}/.ssh/config
+	SSHKEY=${HOME}/.ssh/my-server.ed25519.ssh.priv
+	SSHBIN=/usr/bin/ssh
+	RSYNCBIN=/usr/bin/rsync
+	RSYNCFLAG="-rtuq"
+
+	nohup ${RSYNCBIN} ${RSYNCFLAG} -e "${SSHBIN} -F ${SSHCONFIG} -i ${SSHKEY}" $SERVER:$RPATH $LPATH &>/dev/null &
+}

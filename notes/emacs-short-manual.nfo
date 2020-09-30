@@ -1,0 +1,44 @@
+searching regexp C-M-(s|r)
+exit C-x C-c (opt y for save)
+save C-x C-s
+mark all : C-x h
+cut : C-w
+copy :M-w
+paste :C-y
+undo C-c /
+
+
+#### BUFFERS
+select/create : C-x b buffer <RET>
+select/crete in window : C-x 4 b buffer <RET>
+select/crete in frame : C-x 5 b buffer <RET>
+next/prev C-x <LEFT> or C-x <RIGHT>
+
+list C-x C-b
+readonly C-x C-q
+view buffer M-x view-buffer <name>
+
+kill C-x k <name>
+kill-list M-x kill-some-buffers
+
+show-paren-mode (parenthesis)
+toggle-truncate-lines
+##### WINDOWS
+splits:
+C-x 2 : below
+C-x 3 : right
+
+C-x o : switch
+
+C-x 0 :Delete the selected window (delete-window).
+C-x 1 :Delete all windows in the selected frame except the selected window (delete-other-windows).
+C-x 4 0 :Delete the selected window and kill the buffer that was showing in it (kill-buffer-and-window). The last character in this key sequence is a zero.
+C-x ^ :Make selected window taller (enlarge-window).
+C-x } :Make selected window wider (enlarge-window-horizontally).  C-x { :Make selected window narrower (shrink-window-horizontally).
+C-x - :Shrink this window if its buffer doesn't need so many lines (shrink-window-if-larger-than-buffer).
+:C-x + Make all windows the same height (balance-windows).
+
+##### MENU
+
+F10 to open
+3xESC or C-g to close

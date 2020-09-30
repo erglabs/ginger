@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if ! _:ginger_bin ssh ; then return 1; fi
+
+rssh () 
+{ 
+    args="$@";
+    for ((1; 1; 1))
+    do
+        ssh ${args} -oConnectTimeout=5 ;
+        #out=$?;
+	# right now user is required to stop reconnect loop
+	# if not, 4s timeout for reconnection is started
+        #if [[ out -eq 0 ]]; then
+            echo 'pipe not properly closed, reestabilishing...';
+	    echo ' '
+            for i in $(seq 1 4)  ; do  echo -e  "\e[1Areconnecting in $((5-i))"; sleep 1;  done
+	    echo ' '
+	    echo -e "\e[1Areconnecting right now..."
+        #else
+        #    break;
+        #fi;
+    done
+}

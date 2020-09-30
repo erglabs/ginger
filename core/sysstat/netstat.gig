@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if ! _:ginger_package netstat ; then return 1; fi
+
+function port-openTCP()
+{
+	netstat -tnlapo
+}
+
+function port-openUDP()
+{
+	netstat -unlapo
+}
+
+function port-openALL()
+{
+	netstat -tunlapo
+}
+
+function port-connected()
+{
+	netstat -anp | grep :80 | grep ESTABLISHED | wc -l
+}
+
+function port-show-port()
+{
+	sudo netstat -tulpn | grep $1
+}
+
+#socket handling
+function sock-show-processes()
+{
+	sudo netstat -nape | grep -v 'DGRAM' | awk '{print $6 "\t\t" $7 "\t\t" $8 }' 
+}
+function sock-grep-processes()
+{
+	sudo netstat -nape | grep -v 'DGRAM' | awk '{print $6 "\t\t" $7 "\t\t" $8 } | grep $2' 
+}

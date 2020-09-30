@@ -1,0 +1,56 @@
+#!/bin/bash
+
+#if ! _:ginger_bin zenity 	; then return 1;
+if ! _:ginger_bin gnupg 	; then return 1; fi
+
+
+encrypt ()
+{
+	if ! _:ginger_require gnupg     ; then return 1; fi
+	# Use ascii armor
+	gpg -ac --no-options "$1"
+}
+
+bencrypt ()
+{
+	if ! _:ginger_require gnupg     ; then return 1; fi
+	# No ascii armor
+	# Encrypt binary data. jpegs/gifs/vobs/etc.
+	gpg -c --no-options "$1"
+}
+
+decrypt ()
+{
+	if ! _:ginger_require gnupg     ; then return 1; fi
+	gpg --no-options "$1"
+}
+
+
+keys ()
+{
+	if ! _:ginger_require gnupg     ; then return 1; fi
+# Opens up kgpg keymanager
+kgpg -k
+}
+
+#encryptfile ()
+#{
+#zenity --title="zcrypt: Select a file to encrypt" --file-selection > zcrypt
+#encryptthisfile=`cat zcrypt`;rm zcrypt
+# Use ascii armor
+#  --no-options (for NO gui usage)
+#gpg -acq --yes ${encryptthisfile}
+#zenity --info --title "File Encrypted" --text "$encryptthisfile has been
+#encrypted"
+#}
+
+#decryptfile ()
+#{
+#zenity --title="zcrypt: Select a file to decrypt" --file-selection > zcrypt
+#decryptthisfile=`cat zcrypt`;rm zcrypt
+# NOTE: This will OVERWRITE existing files with the same name !!!
+#gpg --yes -q ${decryptthisfile}
+#zenity --info --title "File Decrypted" --text "$encryptthisfile has been
+#decrypted"
+#}
+

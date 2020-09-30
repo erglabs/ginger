@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if ! _:ginger_bin speaker-test ; then return 1; fi
+
+function audio-test()
+{
+    for each in $(aplay -L | grep CARD= | cut -d"," -f1 | sed 's/CARD=//g'); do
+	speaker-test -l1 -D${each};
+    done
+}

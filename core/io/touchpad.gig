@@ -1,0 +1,14 @@
+#!/bin/bash
+if ! _:ginger_bin synclient ; then return 1; fi
+
+#synaptic client for laptops stuff
+
+_touchoff()
+{
+	synclient touchpadoff=1
+}
+
+_touchon()
+{
+	synclient touchpadoff=0
+}

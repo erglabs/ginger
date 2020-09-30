@@ -1,0 +1,20 @@
+#!/bin/bash
+#!GINGER_STANDARD 1.0.0
+
+if ! _:ginger_bin tar ; then return 1; fi
+if ! _:ginger_bin openssl ; then return 1; fi
+
+enc_tar()
+{
+    tar c folder_to_encrypt | openssl enc -aes-256-cbc -e > "blob$(date -u +%Y_%m%d_%H%M%S).sxz"
+}
+
+enc_compress()
+{
+    tar c folder_to_encrypt | xz -c -1 | openssl enc -aes-256-cbc -e > "blob$(date -u +%Y_%m%d_%H%M%S).sxz"
+}
+
+enc_compress_more()
+{
+    tar c folder_to_encrypt | xz -c -9 | openssl enc -aes-256-cbc -e > "blob$(date -u +%Y_%m%d_%H%M%S).sxz"
+}

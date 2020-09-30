@@ -1,0 +1,140 @@
+#!/bin/bash
+#######################################
+_:gt_warn()
+{
+ _:gclbrown "[GINGER][WARN] "
+ _:gcreset "$@"
+}
+_:gt_notify()
+{
+ _:gcdblue "[GINGER][NOTE] "
+ _:gcreset "$@"
+}
+_:gt_info()
+{
+ _:gcdcyan "[GINGER][INFO] "
+ _:gcreset "$@"
+}
+_:gt_status()
+{
+ _:gclblue "[GINGER][STAT] "
+ _:gcreset "$@"
+}
+_:gt_error()
+{
+ _:gclred "[GINGER][ERR!] "
+ _:gcreset "$@"
+}
+_:gt_success()
+{
+ _:gclgreen "[GINGER][!OK!] "
+ _:gcreset "$@"
+}
+
+_:gt_warn_n()
+{
+ _:gclbrown "[GINGER][WARN] "
+ _:gcreset_n "$@"
+}
+_:gt_notify_n()
+{
+ _:gcdblue "[GINGER][NOTE] "
+ _:gcreset_n "$@"
+}
+_:gt_info_n()
+{
+ _:gcdcyan "[GINGER][INFO] "
+ _:gcreset_n "$@"
+}
+_:gt_status_n()
+{
+ _:gclblue "[GINGER][STAT] "
+_:gcreset_n "$@"
+}
+_:gt_error_n()
+{
+ _:gclred "[GINGER][ERR!] "
+ _:gcreset_n "$@"
+}
+_:gt_success_n()
+{
+ _:gclgreen "[GINGER][!OK!] "
+ _:gcreset_n "$@"
+}
+
+#######################################
+_:gmt_warn()
+{
+ _:gclbrown "[${1}][WARN] "
+shift
+ _:gcreset "$@"
+}
+_:gmt_notify()
+{
+ _:gcdblue "[${1}][NOTE] "
+shift
+ _:gcreset "$@"
+}
+_:gmt_info()
+{
+ _:gcdcyan "[${1}][INFO] "
+shift
+ _:gcreset "$@"
+}
+_:gmt_status()
+{
+ _:gclblue "[${1}][STAT] "
+shift
+ _:gcreset "$@"
+}
+_:gmt_error()
+{
+ _:gclred "[${1}][ERROR] "
+shift
+ _:gcreset "$@"
+}
+_:gmt_success()
+{
+ _:gclgreen "[${1}][!OK!] "
+shift
+_:gcreset "$@"
+}
+
+
+_:gmt_warn_n()
+{
+ _:gclbrown "[${1}][WARN] "
+shift
+ _:gcreset_n "$@"
+}
+_:gmt_notify_n()
+{
+ _:gcdblue "[${1}][NOTE] "
+shift
+ _:gcreset_n "$@"
+}
+_:gmt_info_n()
+{
+ _:gcdcyan "[${1}][INFO] "
+shift
+ _:gcreset_n "$@"
+}
+_:gmt_status_n()
+{
+ _:gclblue "[{$1}][STAT] "
+shift
+ _:gcreset_n "$@"
+}
+_:gmt_error_n()
+{
+ _:gclred "[${1}][ERR!] "
+shift
+ _:gcreset_n "$@"
+}
+
+_:gmt_success_n()
+{
+ _:gclgreen "[${1}][!OK!] "
+shift
+_:gcreset_n "$@"
+}

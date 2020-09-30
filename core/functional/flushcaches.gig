@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#only if you really know what you are doing
+
+function _cache_flush_()
+{
+	sudo sysctl vm.drop_caches=1
+	sleep 1
+	sudo sysctl vm.drop_caches=4
+}

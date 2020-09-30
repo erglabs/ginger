@@ -1,0 +1,55 @@
+#!/bin/bash
+_G_PROMPT_ENABLEGIT=0
+_G_PROMPT_FORCESHORTPATH=0
+
+function _:pathlenght()
+{
+	echo $(tr -dc ',' <<<"$var" | wc -c)
+}
+
+function _:gitresult()
+{
+	if [[ ${_G_PROMPT_ENABLEGIT} -ne 0 ]]
+	then
+		if $(git status | grep -i "up to date" &>/dev/null)
+		then
+			echo -ne "\e[32m(synced)\e[00m"
+		else
+			echo -ne "\e[31m(unsynced)\e[00m"
+		fi
+		if $(git status | grep -i "to be committed:" &>/dev/null)
+		then
+			echo -ne  "\e[33m(dirty)\e[00m"
+		else
+			echo -ne  "\e[32m(clean)\e[00m"
+		fi
+		echo -n $(__git_ps1 "(%s)\e[00m")
+		echo -n :
+	fi
+}
+
+function _devprompt()
+{
+	PS1='\[\e[01;37m\][\t][\h]`echo -n "[${PSUID}]"; echo -n "[L:${SHLVL}]"; if [ $? = 0 ]; then echo "\[\e[32m\] ✔ "; else echo "\[\e[31m\] $? "; fi`\[\e[00;37m\]\u\[\e[01;37m\]:`_:gitresult`\[\e[01;34m\]`if [[ ${_G_PROMPT_FORCESHORTPATH} -ne 0 ]] ; then echo -n \W ; else echo -n \w ; fi`\[\e[00m\]:'
+}
+function crest()
+{
+  tput reset;
+}
+
+function _devshortprompt()
+{
+	PS1='\[\e[01;37m\][\t][\h]`echo -n "[${PSUID}]"; echo -n "[L:${SHLVL}]"; if [ $? = 0 ]; then echo "\[\e[32m\] ✔ "; else echo "\[\e[31m\] $? "; fi`\[\e[00;37m\]\u\[\e[01;37m\]:\[\e[01;34m\]`if [[ ${_G_PROMPT_FORCESHORTPATH} -ne 0 ]] ; then echo -n \W ; else echo -n \w ; fi`\[\e[00m\]:'
+}
+
+if [[ ${SHLVL} -eq 1 ]]
+then
+  PSUID=$(od -vN 3 -An -tx1 /dev/urandom | tr -d " \n" | tr 'a-z' 'A-Z')
+fi
+
+#✘
+
+export PSUID
+export PSLEVEL
+
+_devshortprompt

@@ -1,0 +1,42 @@
+#!/bin/bash
+#nothing special i guess
+
+sysnfo()
+{
+	UPTIME=$(uptime -p | cut -c 4-)
+	LOCALLINKLIST=$(hostname --all-ip-addresses)
+	REMOTELINKLIST=$(curl http://ipinfo.io/ip 2>/dev/null)
+	IAM=$(uname -a)
+	LOADAVG=$(cat /proc/loadavg)
+	_:gcdred 'loads:'
+	_:gcdblue_n "\t$LOADAVG"
+	_:gcdred 'available cpu:'
+	_:gcdblue_n "\t$(nproc --all)"
+	_:gcline
+	_:gcdred_n 'networking:'
+	_:gcdblue_n 'hardware inerfaces:'
+	_:gcdblue_n $((ls /sys/class/net/))
+	_:gcdred_n processes:
+	_:gcdgreen
+	mpstat -P ALL
+	_:gcline
+	_:gcdred_n 'available links:'
+	for each in ${LOCALLINKLIST};
+	do
+		_:gcdblue_n '\t' $each
+	done
+	_:gcblue
+	route
+	_:gcdred_n remote links:
+	for each in ${REMOTELINKLIST};
+	do
+		_:gcdblue_n '\t' $each
+	done
+	who -q
+	who -T
+	who -d
+	who -b
+	date -U
+	
+	_:gcdreset
+}

@@ -1,0 +1,27 @@
+#VERSION 1.0
+#PROVIDE NOTIFICATION_MACROF
+#REQUIRE P LIBNOTIFY
+_:ginger_package libnotify-bin
+
+_:gn_warn()
+{
+	notify-send -t 1 -u normal $@
+}
+_:gn_notify()
+{
+	notify-send -t 1 -u normal $@
+}
+_:gn_info()
+{
+	notify-send -t 1 -u normal $@
+}
+_:gn_status()
+{
+	notify-send -t 1 -u normal $@
+}
+_:gn_error()
+{
+	notify-send -t 1 -u critical $@
+}
+
+

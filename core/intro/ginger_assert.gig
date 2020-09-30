@@ -1,0 +1,97 @@
+#!/bin/bash
+
+#REQUIRE ginger_tag
+#require ginger color and ginger tag
+
+# _:gassert_empty_dir()
+# {
+#   echo not yet implemented
+#   return 1
+# }
+
+# _:gassert_empty_file()
+# {
+#   echo not yet implemented
+#   return 1
+# }
+
+# _:gassert_no_dir()
+# {
+#   echo not yet implemented
+#   return 1
+# }
+
+# _:gassert_is_number()
+# {
+#   echo not yet implemented
+#   return 1
+# }
+# _:gassert_is_string()
+# {
+#   echo not yet implemented
+#   return 1
+# }
+# does not work for anything other than dpkg/apt/aptitude based distros
+# we will do everything with ginger_bin from now
+# _:ginger_package()
+# {
+#   shit() { _:gt_error_n "not installed by dpkg: ${1}" ; }
+#   ( dpkg-query -l $1 &>/dev/null && return 0 ) ||  ( shit $1 ; return 1; )
+# }
+_:gassert_is_sudo()
+{
+  if [[ $UID != 0 ]]; then return 0 ; fi
+  if _:ginger_package sudo ; then
+    (sudo -n uname &>/dev/null && return 0) || return 1
+  fi
+}
+
+# one name or list
+_:ginger_function()
+{
+  shit() { _:gt_error_n "function not sourced or does not exist: ${1}" ; }
+	( type -t $1 &>/dev/null && return 0 ) ||  ( shit $1 ; return 1; )
+}
+
+# does not work for anything other than dpkg/apt/aptitude based distros
+# we will do everything with ginger_bin from now
+# _:ginger_package()
+# {
+#   shit() { _:gt_error_n "not installed by dpkg: ${1}" ; }
+# 	( dpkg-query -l $1 &>/dev/null && return 0 ) ||  ( shit $1 ; return 1; )
+# }
+
+_:ginger_bin()
+{
+  shit() { _:gt_error_n "i cant find executable: ${1} " ; }
+  # to simplyfy the code
+  BAIL=0
+  if [[ ! -f ${1} ]]; then
+    if ! wchich ${1} &>/dev/null ; then
+      shit ${1} ; return 1;
+    fi
+  fi
+  return 0
+  # ( (  || [[ -f $(which ${1} ) ]] ) ||  && return 0 ) ||  ( shit $1 ; return 1; )
+}
+
+_:ginger_function_silent()
+{
+  shit() { _:gclred " f:${1}" ;  _:gcreset ; }
+	( type -t $1 &>/dev/null && return 0 ) ||  ( shit $1 ; return 1; )
+}
+
+_:ginger_package_silent()
+{
+  shit() { _:gclred " p:${1}" ; _:gcreset ; }
+	( dpkg-query -l $1 &>/dev/null && return 0 ) ||  ( shit $1 ; return 1; )
+}
+
+_:ginger_bin_silent()
+{
+    shit() { _:gclred " b:${1} " ; _:gcreset ; }
+  ( [ -f $1 ] && return 0 ) ||  ( shit $1 ; return 1; )
+  # i guess more searching is required here
+}
+
+

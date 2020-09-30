@@ -1,0 +1,22 @@
+#!/bin/bash
+if ! _:ginger_bin xsel ; then return 1; fi
+
+clear()
+{
+	echo -e \\033c
+}
+
+dpcpy()
+{
+    pwd | xsel -b
+    _:gt_info_n copied : `pwd`
+}
+
+fpcpy()
+{
+	if [[ ! -z ${1} ]] ;
+	then
+		realpath ${1} | xsel -b
+		_:gt_info_n copied : `realpath ${1}`
+	fi
+} 

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if ! _:ginger_bin /usr/bin/executablefile ; then return 1; fi
+
+myfunction() {
+}
+

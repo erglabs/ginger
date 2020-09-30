@@ -1,0 +1,20 @@
+#!/bin/bash
+if ! _:ginger_package youtube-dl ; then return 1; fi
+
+function ytd-all()
+{
+    for ARG in "$@"
+    do
+	echo $ARG
+        youtube-dl -f bestaudio -x --restrict-filenames -o "%(title)s-%(id)s.%(ext)s"  $ARG
+    done
+}
+
+function ytd-single()
+{
+    for ARG in "$@"
+    do
+	echo $ARG
+        youtube-dl -f bestaudio -x --no-playlist --restrict-filenames -o "%(title)s-%(id)s.%(ext)s"  $ARG
+    done
+}

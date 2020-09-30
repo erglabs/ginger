@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function addtimer() {
+
+  DIR="${HOME}/.timer"
+  NAME=${1}
+  MIN=${2}
+
+  if [[ -z ${NAME} ]]
+  then
+      echo need two parameters, missing name
+      return 1
+  fi
+
+  if [[ -z ${MIN} ]]
+  then
+      echo need two parameters, missing minu
+      return 2
+  fi
+
+  echo ${MIN} > "${DIR}/${NAME}.s"
+  return 0;
+}
+

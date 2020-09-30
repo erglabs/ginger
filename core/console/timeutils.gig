@@ -1,0 +1,11 @@
+#!/bin/bash
+
+timestampr()
+{
+    date -u +%Y_%m%d_%H%M%S
+}
+
+timestamp()
+{
+    date -u +%Y%m%d%H%M%S
+}

@@ -1,0 +1,85 @@
+#!/bin/bash
+
+_:gcline()
+  { echo -en '\n'; }
+_:gctab()
+  { echo -en '\t'; }
+#current:
+_:gcblack()
+  { echo -en "\e[0;30m$@"; }
+_:gcdblue()
+  { echo -en "\e[0;34m$@"; }
+_:gcdgreen()
+  { echo -en "\e[0;32m$@"; }
+_:gcdcyan()
+  { echo -en "\e[0;36m$@"; }
+_:gcdred()
+  { echo -en "\e[0;31m$@"; }
+_:gcdpurple()
+  { echo -en "\e[0;35m$@"; }
+_:gcdbrown()
+  { echo -en "\e[0;33m$@"; }
+_:gcdgray()
+  { echo -en "\e[0;37m$@"; }
+_:gclgray()
+  { echo -en "\e[1;38m$@"; }
+_:gclblue()
+  { echo -en "\e[1;34m$@"; }
+_:gclgreen()
+  { echo -en "\e[1;32m$@"; }
+_:gclcyan()
+  { echo -en "\e[1;36m$@"; }
+_:gclred()
+  { echo -en "\e[1;31m$@"; }
+_:gclpurple()
+  { echo -en "\e[1;35m$@"; }
+_:gclbrown()
+  { echo -en "\e[1;33m$@"; }
+_:gcwhite()
+  { echo -en "\e[1;37m$@"; }
+#for fun
+_:gcreset()
+  { echo -en "\e[0m$@"; }
+
+_:gcblack_n()
+  { echo -e "\e[0;30m$@"; }
+_:gcdblue_n()
+  { echo -e "\e[0;34m$@"; }
+_:gcdgreen_n()
+  { echo -e "\e[0;32m$@"; }
+_:gcdcyan_n()
+  { echo -e "\e[0;36m$@"; }
+_:gcdred_n()
+  { echo -e "\e[0;31m$@"; }
+_:gcdpurple_n()
+  { echo -e "\e[0;35m$@"; }
+_:gcdbrown_n()
+  { echo -e "\e[0;33m$@"; }
+_:gcdgray_n()
+  { echo -e "\e[0;37m$@"; }
+_:gclgray_n()
+  { echo -e "\e[1;38m$@"; }
+_:gclblue_n()
+  { echo -e "\e[1;34m$@"; }
+_:gclgreen_n()
+  { echo -e "\e[1;32m$@"; }
+_:gclcyan_n()
+  { echo -e "\e[1;36m$@"; }
+_:gclred_n()
+  { echo -e "\e[1;31m$@"; }
+_:gclpurple_n()
+  { echo -e "\e[1;35m$@"; }
+_:gclbrown_n()
+  { echo -e "\e[1;33m$@"; }
+_:gcwhite_n()
+  { echo -e "\e[1;37m$@"; }
+#for fun
+_:gcreset_n()
+  { echo -e "\e[0m$@"; }
+
+function _:gmeraseup()
+{
+    for i in $(seq 1 $1); do
+        tput cuu 1 && tput el1 && tput el
+    done
+}

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+
+#todo
+# change provides for rust implementation
+# instead gcp (python based)
+
+if ! _:ginger_bin gcp ; then return 1; fi
+
+acpy() 
+{
+    DEST=$(eval echo $(echo '$'"$#"));
+    TOTAL=$(($#-1));
+    COPYNR=1;
+    while [[ "$#" -gt 1 ]];
+    do
+	gcp -r ${1}  ${DEST}
+	shift;
+	COPYNR=$(($COPYNR+1));
+    done;
+};

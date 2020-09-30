@@ -1,0 +1,34 @@
+[2019.04.01][001.000.027]
+* First internal Release 
+
+[2019.06.12][001.001.002]
+* Internal Release on code.erglabs.org
+* preconfig feature 
+
+
+[2019.10.03][001.003.011]
+* Internal Relase on code.erglabs.org
+* templates
+* nano config
+
+[2019.11.21][001.004.046]
+* Internal Relase on code.erglabs.org
+* io and media modules
+
+[2020.02.19][002.001.000]
+* Internal Relase on code.erglabs.org
+* full rewrite, new architecture
+* multiple additional features
+* new loading helpers 
+
+[2020.03.00][003.000.000]
+* Internal Relase on code.erglabs.org
+* Stabilisation
+* preparation to polish most outstating bugs
+  and release to github
+
+[2020.03.00][003.012.010]
+* github release, code.erglabs.org set as 
+  archive and mirroring
+* licence changed to gpl
+* general cleanup

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+function nt(){ printf '\e]2;%s\a' "$*";}
