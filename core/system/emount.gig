@@ -1,0 +1,68 @@
+#!/bin/bash
+if ! _:ginger_bin mount ; then return 1; fi
+
+# mounts any mount (i.e. /dev/sda1) to respective /mnt dir (i.e. sda1)
+# there are 4 strategies:
+# 1. one parameter i.e. /dev/sda1 will be cut and translated to sda1,
+# 2. two parameters i.e. "/dev/sda1 ext" will be mounted in /mnt/ext
+# 3. one parameter i.e. file orr /home/user/file will not get mounted
+# 4. two parameters i.e. "file intfile" will get mounted into /mnt/intfile
+# if mount directory does not exist, create
+# if mount directory is in use, bail out
+# root permissions are required to mount (i.e. sudo)
+# mount will have user:user ownership after mounting
+ 
+function emount() {
+	echo testing ${1}
+	DESIRED=${1}
+	if [[ ! -z ${2} ]]
+	then
+		DESIRED_RAW=${2}
+		echo "using ${2} from parameters as desired mount"
+	else
+		if echo ${DESIRED} | grep '/dev/'
+		then
+			echo "desired path appears to be a block device, extracting name"
+			DESIRED_RAW=$(echo ${DESIRED} | rev | cut -d '/' -f 1 | rev)
+			echo "using ${DESIRED_RAW} deduced from command as desired mount"
+		else
+			echo "file does not appear to be a block device but no name"
+			echo "was provided, aborting"
+			return 2
+		fi
+	fi
+
+	if [[ ! -e ${DESIRED} ]]
+	then
+		echo "desired device ${DESIRED} does not exist"
+		return 3
+	fi
+
+	if ! sudo -v
+	then
+		echo "file permissions stuff error"
+		return 5
+	fi
+
+	if mount | grep ${DESIRED}
+	then
+		echo 'desired mount already mounted elsewhere'
+		return 4
+	fi
+
+	if mount | grep ${DESIRED_RAW}
+	then
+		echo 'mountpoint in use by other device'
+		return 7
+	fi
+ 
+ 
+	if [[ ! -d "/mnt/${DESIRED_RAW}" ]]
+	then
+		echo "creating /mnt/${DESIRED_RAW}"
+		sudo mkdir -p "/mnt/${DESIRED_RAW}"
+	fi
+	echo "mounting now ${DESIRED} to ${DESIRED_RAW}"
+	sudo mount ${DESIRED} "/mnt/${DESIRED_RAW}"
+	sudo chown ${EUID} "/mnt/${DESIRED_RAW}"
+}

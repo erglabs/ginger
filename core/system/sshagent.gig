@@ -1,0 +1,39 @@
+#!/bin/bash
+if ! _:ginger_bin ssh-agent ; then return 1; fi
+
+__SSH_ENV="$HOME/.ssh/environment"
+
+# functions starting with _: should not be used by user
+# this script is mentioned to be run within bashrc once per session
+# most relevant for gentoo-like distros
+
+function _:g_load_agent {
+    . "${__SSH_ENV}" &>/dev/null
+}
+
+function _:g_start_agent {
+    echo -n "SSH agent does not exist or defunct, restarting..."
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${__SSH_ENV}"
+    echo "succeeded"
+    chmod 600 "${__SSH_ENV}"
+}
+
+# create parent dirs if not exist
+if [[ ! -d ${__SSH_ENV} ]]; then
+    mkdir -p "${__SSH_ENV}" &>/dev/null
+fi
+
+# if not exist create, usually it should
+if [[ ! -f "${__SSH_ENV}" ]]; then
+    pkill ssh-agent; #to be sure
+    _g_start_agent;
+    _g_load_agent
+else
+    _g_load_agent
+fi
+
+if ! ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null ; then
+    # we could check for existence of SSH_AUTH_SOCK, but it may be left as trash
+    _g_start_agent;
+    _g_load_agent
+fi
