@@ -76,4 +76,5 @@ GINGER_READY=1
     fi
 
 #GINGER_DBREAD=${GINGER_HOME/databases/.gdb.src}
-    alias ginger_show_failed_modules='i=0 ; while [[ ${GINGER_LOAD_FAILED_N} -ne i ]] ; do echo ${GINGER_LOAD_FAILED[${i}]}; i=$((i+1)) ; done'
+alias ginger_show_failed_modules='i=0 ; while [[ ${GINGER_LOAD_FAILED_N} -ne i ]] ; do echo ${GINGER_LOAD_FAILED[${i}]}; i=$((i+1)) ; done'
+alias ginger_show_failed_modules_full='i=0 ; while [[ ${GINGER_LOAD_FAILED_N} -ne i ]] ; do echo ${GINGER_LOAD_FAILED[${i}]}; echo ${GINGER_LOAD_FAILED_REASON[${i}]}; i=$((i+1)) ; done'

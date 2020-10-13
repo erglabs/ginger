@@ -27,8 +27,13 @@
 * preparation to polish most outstating bugs
   and release to github
 
-[2020.03.00][003.012.010]
+[2020.03.00][003.003.004]
 * github release, code.erglabs.org set as 
   archive and mirroring
 * licence changed to gpl
 * general cleanup
+
+[2020.10.13][003.003.005]
+* cleanup after migration
+* functional fixes due to change in 
+  few architecture-relavant places

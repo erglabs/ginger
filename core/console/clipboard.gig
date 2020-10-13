@@ -2,7 +2,7 @@
 # A shortcut function that simplifies usage of xclip.
 # - Accepts input from either stdin (pipe), or params.
 # ------------------------------------------------
-  if ! _:ginger_bin xsel ; then return 1; fi
+if ! _:ginger_bin xsel ; then return 1; fi
 
 #TODO maybe drop root restriction
 

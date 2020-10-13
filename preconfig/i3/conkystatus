@@ -6,7 +6,7 @@ own_window no
 out_to_console yes
 background no
 max_text_width 0
-
+pad_percents 3
 # Update interval in seconds
 update_interval 1.0
 
@@ -58,6 +58,8 @@ TEXT
     # enp0s20u1 should work.
     ${if_up wls2} { "full_text" : "(${wireless_essid wls2}) ${addr wls2}" , "color" : "\#00ff00" }, ${endif}
     ${if_up eno1} { "full_text" : "Eth: ${addr eno1}" , "color" : "\#00ff00" }, ${endif}
+    # you shoudl configure it here yourself, change enp0s31f6 to name of your interface
+    { "full_text" : "ip: ${addr enp0s31f6}" , "color" : "\#00ff00" },
     { "full_text" : "GW: ${gw_iface} ${gw_ip}" , "color" : "\#00ff00" },
     
     # All the charges for the Battery
@@ -68,7 +70,8 @@ TEXT
     { "full_text" : "Vol:${exec amixer get Master -M | grep -oE -m1 "[[:digit:]]*%"}", "color" : "\#ffffff"},
     
     # Time 
-    { "full_text" : "${time %H:%M:%S}" , "color" : "\#ff8800"},
+    { "full_text" : "${time %Z:%T}" , "color" : "\#ff8800"},
+    { "full_text" : "${tztime UTC %Z:%T}" , "color" : "\#ff8800"},
     # Date
     { "full_text" : "${time %a w.%V %F}" , "color" : "\#ffffff" }
     ],

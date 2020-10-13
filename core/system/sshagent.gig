@@ -26,14 +26,14 @@ fi
 # if not exist create, usually it should
 if [[ ! -f "${__SSH_ENV}" ]]; then
     pkill ssh-agent; #to be sure
-    _g_start_agent;
-    _g_load_agent
+    _:g_start_agent;
+    _:g_load_agent
 else
-    _g_load_agent
+    _:g_load_agent
 fi
 
 if ! ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null ; then
     # we could check for existence of SSH_AUTH_SOCK, but it may be left as trash
-    _g_start_agent;
-    _g_load_agent
+    _:g_start_agent;
+    _:g_load_agent
 fi

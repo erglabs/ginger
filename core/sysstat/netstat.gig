@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if ! _:ginger_package netstat ; then return 1; fi
+if ! _:ginger_bin netstat ; then return 1; fi
 
 function port-openTCP()
 {
