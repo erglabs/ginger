@@ -1,6 +1,7 @@
 #!/bin/bash
-
 if ! _:ginger_bin speaker-test ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+############################################
 
 function audio-test()
 {

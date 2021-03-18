@@ -1,4 +1,7 @@
-killzombies()
+#!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+
+_:g_killzombies()
 {
         kill -HUP $(ps -A -ostat,ppid | grep -e '[zZ]'| awk '{ print $2 }')
 }

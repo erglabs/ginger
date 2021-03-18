@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
+
 #   Slick Progress Bar
 #   Created by: Ian Brown (ijbrown@hotmail.com)
 #   Please share with me your modifications

@@ -1,4 +1,5 @@
 #!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
 
 #only if you really know what you are doing
 

@@ -1,6 +1,7 @@
 #!/bin/bash
-
 if ! _:ginger_bin tar ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
 
 #TODO
 # tar provides compressor implementation from not so long,

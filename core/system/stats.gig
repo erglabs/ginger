@@ -1,8 +1,8 @@
 #!/bin/bash
-
 if ! _:ginger_bin free ; then return 1; fi
 if ! _:ginger_bin df ; then return 1; fi
 if ! _:ginger_bin top ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
 
 sysstats()
 {

@@ -1,8 +1,8 @@
 #!/bin/bash
-#!GINGER_STANDARD 1.0.0
-
 if ! _:ginger_bin tar ; then return 1; fi
 if ! _:ginger_bin openssl ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
 
 enc_tar()
 {

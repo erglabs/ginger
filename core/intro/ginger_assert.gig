@@ -1,7 +1,6 @@
 #!/bin/bash
-
-#REQUIRE ginger_tag
-#require ginger color and ginger tag
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
 
 # _:gassert_empty_dir()
 # {

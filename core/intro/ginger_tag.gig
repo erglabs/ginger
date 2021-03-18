@@ -1,5 +1,7 @@
 #!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
 #######################################
+
 _:gt_warn()
 {
  _:gclbrown "[GINGER][WARN] "

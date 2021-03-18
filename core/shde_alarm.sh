@@ -1,3 +1,5 @@
+#!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
 
 function countdown()
 {

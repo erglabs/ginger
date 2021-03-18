@@ -1,4 +1,5 @@
 #!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ; set -x ; done
 
 if ! _:ginger_bin /usr/bin/executablefile ; then return 1; fi
 

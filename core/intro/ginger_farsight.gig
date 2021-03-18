@@ -1,4 +1,6 @@
 #!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
 
 _:gcline()
   { echo -en '\n'; }

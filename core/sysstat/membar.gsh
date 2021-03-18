@@ -1,8 +1,8 @@
 #!/bin/bash
-
-if ! _:ginger_bin then ; then return 1; fi
 if ! _:ginger_bin grep ; then return 1; fi
 if ! _:ginger_bin awk ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+############################################
 
 _physical_free=$( free | grep Mem: | awk '{print ($5+$4)/$2*100}' | cut -f 1 -d '.' )
 _physical_used=$( free | grep Mem: | awk '{print (1-(($5+$4)/$2))*100}' | cut -f 1 -d '.' )

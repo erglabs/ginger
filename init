@@ -1,4 +1,5 @@
 #!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
 
 # disallow loading twice
 if [[ $GINGER_READY -eq 1 ]]; then echo ginger ready; return; fi

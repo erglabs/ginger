@@ -1,6 +1,6 @@
 #!/bin/bash
 if ! _:ginger_bin ssh-agent ; then return 1; fi
-
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
 __SSH_ENV="$HOME/.ssh/environment"
 
 # functions starting with _: should not be used by user

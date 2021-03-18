@@ -2,9 +2,13 @@
 
 echo ' '
 echo ' >>> ginger is warming up!'
-echo " >>> version >>> $(cat version.nfo)"
+echo ' >>> versioninfo:'
+echo ' >>>   Q1 2021 update'
+echo " >>>   $(cat version.nfo)"
 WHEREAMI=$(readlink -f $0)
 WHEREAMI=$(echo ${WHEREAMI} | awk -F'/' '{for (i=2; i<=(NF-1); i++) printf("/%s", $i)}')
+
+# we want some basic helpers before instalation
 source ${WHEREAMI}/core/intro/ginger_farsight.gig
 source ${WHEREAMI}/core/intro/ginger_tag.gig
 GINGER_INSTALL_DIR=""
@@ -16,6 +20,7 @@ function separator()
     _:gcreset
     return 0
 }
+
 function separator_n()
 {
     echo ' '

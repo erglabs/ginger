@@ -1,6 +1,6 @@
 #!/bin/bash
-
-#TODO docs
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
 
 drawbar()
 {

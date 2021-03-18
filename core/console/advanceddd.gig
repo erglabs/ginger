@@ -1,8 +1,8 @@
 #!/bin/bash
-
 if ! _:ginger_bin /bin/dd ; then return 1; fi
 if ! _:ginger_bin pv ; then return 1; fi
-
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
 ddmon()
 {
 # prototype " xxx if, of, 'flags' "

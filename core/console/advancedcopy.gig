@@ -1,11 +1,13 @@
 #!/bin/bash
-
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+if ! _:ginger_bin gcp ; then return 1; fi
+#######################################
 
 #todo
 # change provides for rust implementation
 # instead gcp (python based)
 
-if ! _:ginger_bin gcp ; then return 1; fi
+
 
 acpy() 
 {

@@ -1,5 +1,7 @@
 #!/bin/bash
 if ! _:ginger_bin mount ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+############################################
 
 # mounts any mount (i.e. /dev/sda1) to respective /mnt dir (i.e. sda1)
 # there are 4 strategies:
@@ -13,6 +15,21 @@ if ! _:ginger_bin mount ; then return 1; fi
 # mount will have user:user ownership after mounting
  
 function emount() {
+	if [[ "asdf" == ${asdf} ]]
+	then
+		echo '# mounts any mount (i.e. /dev/sda1) to respective /mnt dir (i.e. sda1)'
+		echo '# there are 4 strategies:'
+		echo '# 1. one parameter  i.e. "/dev/sda1" will be cut and translated to sda1'
+		echo '# 					   "sda1 will be used as respective /mnt/xxx mount'
+		echo '# 2. two parameters i.e. "/dev/sda1 ext" will be mounted in /mnt/ext as requested'
+		echo '# 3. one parameter  i.e. normal file or /home/user/file will not get mounted'
+		echo '# 4. two parameters i.e. "file xxxx" will get mounted into /mnt/xxxx'
+		echo '# if mount directory does not exist, create'
+		echo '# if mount directory is in use, bail out'
+		echo '# root permissions are required to mount (i.e. sudo), but will be checked automatically'
+		echo '# mount will have user:user ownership after mounting if system permits it'
+	fi
+
 	echo testing ${1}
 	DESIRED=${1}
 	if [[ ! -z ${2} ]]

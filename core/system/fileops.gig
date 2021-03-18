@@ -1,5 +1,7 @@
 #!/bin/bash
 if ! _:ginger_bin du ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+
 
 function filesize() {
   usage() { echo 'filesize -f file, -h for human readable'; return 1; }

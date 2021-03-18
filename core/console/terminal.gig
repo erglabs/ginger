@@ -1,3 +1,4 @@
 #!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
 
 function nt(){ printf '\e]2;%s\a' "$*";}

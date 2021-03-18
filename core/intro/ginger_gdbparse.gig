@@ -1,4 +1,6 @@
 #!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+
 #format $1=file $2=KEY, $3=fieldnumber returns value string
 __get_gdbconfig() #format $1=file $2=KEY, $3=fieldnumber returns HEADERTAG=VALUE stringpairs
 {

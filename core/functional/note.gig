@@ -3,6 +3,8 @@ if ! _:ginger_bin rsync ; then return 1; fi
 if ! _:ginger_bin ssh ; then return 1; fi
 if ! _:ginger_bin task-spooler ; then return 1; fi
 if ! _:ginger_bin /usr/bin/sha1sum ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+############################################
 
 note()
 {
@@ -10,9 +12,9 @@ note()
 	IAM=$(id -un)
 	LPATH=$HOME/.ginger/notes
 	RPATH=/cargo/sync/${IAM}/.ginger/notes
-	SERVER=dthw #take from ssh's config file per user
+	SERVER=serverunconfiguredinscript #take from ssh's config file per user
 	SSHCONFIG=${HOME}/.ssh/config
-	SSHKEY=${HOME}/.ssh/dthw-net
+	SSHKEY=${HOME}/.ssh/ginger.ssh.ed.priv
 	SSHBIN=/usr/bin/ssh
 	RSYNCBIN=/usr/bin/rsync
 	RSYNCFLAG="-rtuq"
@@ -20,7 +22,7 @@ note()
 
 	if [ "$#" -lt 1 ]
 	then
-		echo "Illegal number of parameters"
+		echo 'Illegal number of parameters'
 		echo ' note <name> <options> '
 	fi
 

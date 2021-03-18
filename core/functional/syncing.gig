@@ -2,6 +2,7 @@
 
 if ! _:ginger_bin ssh ; then return 1; fi
 if ! _:ginger_bin rsync ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
 return # disabled (unconfigured run is not permitted)
 
 _sync-push()

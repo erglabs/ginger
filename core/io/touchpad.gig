@@ -1,6 +1,7 @@
 #!/bin/bash
 if ! _:ginger_bin synclient ; then return 1; fi
-
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+############################################
 #synaptic client for laptops stuff
 
 _touchoff()

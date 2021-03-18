@@ -1,6 +1,7 @@
 #!/bin/bash
-
 if ! _:ginger_bin netstat ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+############################################
 
 function port-openTCP()
 {

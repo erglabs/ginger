@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
+
 _G_PROMPT_ENABLEGIT=0
 _G_PROMPT_FORCESHORTPATH=0
 

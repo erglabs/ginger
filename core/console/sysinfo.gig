@@ -1,11 +1,16 @@
 #!/bin/bash
-#nothing special i guess
+if ! _:ginger_bin mpstat ; then return 1; fi
+if ! _:ginger_bin hostnamectl ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
 
 sysnfo()
 {
 	UPTIME=$(uptime -p | cut -c 4-)
-	LOCALLINKLIST=$(hostname --all-ip-addresses)
-	REMOTELINKLIST=$(curl http://ipinfo.io/ip 2>/dev/null)
+	_:gcdgreen
+	hostnamectl
+	LOCALLINKLIST="$(ip l | grep ": " | cut -d ":" -f 2)"
+	REMOTELINKLIST="$(curl http://ipinfo.io/ip 2>/dev/null)"
 	IAM=$(uname -a)
 	LOADAVG=$(cat /proc/loadavg)
 	_:gcdred 'loads:'
@@ -15,7 +20,9 @@ sysnfo()
 	_:gcline
 	_:gcdred_n 'networking:'
 	_:gcdblue_n 'hardware inerfaces:'
-	_:gcdblue_n $((ls /sys/class/net/))
+	for each in $(/bin/ls /sys/class/net/) ; do
+		_:gcdblue_n " -> ${each}"
+	done
 	_:gcdred_n processes:
 	_:gcdgreen
 	mpstat -P ALL
@@ -23,20 +30,27 @@ sysnfo()
 	_:gcdred_n 'available links:'
 	for each in ${LOCALLINKLIST};
 	do
-		_:gcdblue_n '\t' $each
+		_:gcdblue_n '\t->' ${each}
 	done
-	_:gcblue
+	_:gcdred_n 'routing:'
+	_:gclblue
 	route
 	_:gcdred_n remote links:
 	for each in ${REMOTELINKLIST};
 	do
 		_:gcdblue_n '\t' $each
 	done
+	_:gcdred_n 'access and user info:'
+	_:gclblue
 	who -q
 	who -T
 	who -d
+	_:gcdred_n 'boot time:'
+	_:gclblue
 	who -b
-	date -U
+	_:gcdred_n 'current univeral time:'
+	_:gclblue
+	date -u
 	
-	_:gcdreset
+	_:gcreset
 }

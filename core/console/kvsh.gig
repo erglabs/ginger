@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-#no special prerequisites
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
 
 #TODO: backup
 #TODO: remove

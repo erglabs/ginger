@@ -1,4 +1,8 @@
-# need validators!
+#!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+#######################################
+
+# todo add validators
 
 _:varinc()
 {	# i will increase variable!

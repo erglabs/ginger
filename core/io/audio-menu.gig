@@ -1,64 +1,65 @@
 #!/bin/bash
-
 if ! _:ginger_bin pactl ; then return 1; fi
 if ! _:ginger_bin pacmd ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+############################################
 
 function audio-menu()
 {
-declare index=0
-declare -a table
-for line in $(pactl list short sinks | cut -d"`echo -e '\t'`" -f 2) ; do
-    table[${index}]="${line}"
-    index=$((${index}+1))
-done
-declare chice=0;
-declare current=-1
-
-while true ; do
-
-    echo available devices:
-    for i in $(seq 0 $((${index}-1))); do
-	if [[ ${current} -eq ${i} ]]; then
-	   if [[ ${choice} -eq ${i} ]]; then
-	       echo -e "\e[1;97;41m${i} > ${table[${i}]}$(_:gcreset)"
-	   else
-	       echo -e "${i} > ${table[${i}]}"
-	   fi
-	else
-	    if [[ ${choice} -eq ${i} ]]; then
-		echo -e "\e[1;97;41m${i}   ${table[${i}]}$(_:gcreset)"
-	    else
-		echo -e "${i}   ${table[${i}]}"
-	    fi
-	fi
-    done
-
-    echo "[w/s] to move, [q] to exit"
-    echo "enter will choose but not exit"
-
-    read -n 1 -re
-
-    if [[ ${REPLY} =~ ^[w]$ ]] ; then
-	if [[ ${choice} -ne 0 ]]; then
-	    choice=$((${choice}-1))
-	fi
-    fi
-    if [[ ${REPLY} =~ ^[s]$ ]] ; then
-        if [[ ${choice} -ne $((${index}-1)) ]]; then
-	    choice=$((${choice}+1))
-	fi
-    fi
-    if [[ ${REPLY} =~ ^[q]$ ]] ; then
-        break
-    fi
-    if [[ ${REPLY} == "" ]] ; then
-	for input in $(pactl list short sink-inputs | awk '{print $1}'); do
-	    pacmd move-sink-input "${input}" "${table[${choice}]}"
+	declare index=0
+	declare -a table
+	for line in $(pactl list short sinks | cut -d"`echo -e '\t'`" -f 2) ; do
+	    table[${index}]="${line}"
+	    index=$((${index}+1))
 	done
-	    pacmd set-default-sink "${table[${choice}]}"
-	current=${choice}
-    fi
- 
-    _:gmeraseup $((${index}+4))
-done
+	declare chice=0;
+	declare current=-1
+
+	while true ; do
+
+	    echo available devices:
+	    for i in $(seq 0 $((${index}-1))); do
+		if [[ ${current} -eq ${i} ]]; then
+		   if [[ ${choice} -eq ${i} ]]; then
+		       echo -e "\e[1;97;41m${i} > ${table[${i}]}$(_:gcreset)"
+		   else
+		       echo -e "${i} > ${table[${i}]}"
+		   fi
+		else
+		    if [[ ${choice} -eq ${i} ]]; then
+			echo -e "\e[1;97;41m${i}   ${table[${i}]}$(_:gcreset)"
+		    else
+			echo -e "${i}   ${table[${i}]}"
+		    fi
+		fi
+	    done
+
+	    echo "[w/s] to move, [q] to exit"
+	    echo "enter will choose but not exit"
+
+	    read -n 1 -re
+
+	    if [[ ${REPLY} =~ ^[w]$ ]] ; then
+		if [[ ${choice} -ne 0 ]]; then
+		    choice=$((${choice}-1))
+		fi
+	    fi
+	    if [[ ${REPLY} =~ ^[s]$ ]] ; then
+	        if [[ ${choice} -ne $((${index}-1)) ]]; then
+		    choice=$((${choice}+1))
+		fi
+	    fi
+	    if [[ ${REPLY} =~ ^[q]$ ]] ; then
+	        break
+	    fi
+	    if [[ ${REPLY} == "" ]] ; then
+		for input in $(pactl list short sink-inputs | awk '{print $1}'); do
+		    pacmd move-sink-input "${input}" "${table[${choice}]}"
+		done
+		    pacmd set-default-sink "${table[${choice}]}"
+		current=${choice}
+	    fi
+
+	    _:gmeraseup $((${index}+4))
+	done
 }
