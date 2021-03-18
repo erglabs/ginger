@@ -1,11 +1,12 @@
-# additional functionality fot bash shells, basically a framework
+### additional functionality for bash shells
+
 * undisclosed code,
 * easy extendability
 * can be deployed to any machine with bash
 * using latest bash features
 * third party repos included ( at least scritps to set thos up )
 
-# example functionality:
+### example functionality:
 * progres bar for copy, move, dd, etc
 * better prompt
 * quick, automatic mounting files, including LUKS ones
