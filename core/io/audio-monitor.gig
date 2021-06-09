@@ -1,0 +1,17 @@
+#!/bin/bash
+if ! _:ginger_bin pactl ; then return 1; fi
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+
+audio_micmonitor_enable()
+{
+	pactl load-module module-loopback latency_msec=1
+	_:gt_notify_n "Added audio monitor to your default audio output!"
+}
+
+
+audio_micmonitor_disable()
+{
+	pactl unload-module module-loopback
+	_:gt_notify_n "Audio monitor removed!"
+}
+

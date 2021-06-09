@@ -3,7 +3,7 @@
 echo ' '
 echo ' >>> ginger is warming up!'
 echo ' >>> versioninfo:'
-echo ' >>>   Q1 2021 update'
+echo ' >>>   Q2 2021 update'
 echo " >>>   $(cat version.nfo)"
 WHEREAMI=$(readlink -f $0)
 WHEREAMI=$(echo ${WHEREAMI} | awk -F'/' '{for (i=2; i<=(NF-1); i++) printf("/%s", $i)}')
