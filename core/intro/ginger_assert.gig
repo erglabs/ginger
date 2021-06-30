@@ -63,6 +63,11 @@ _:ginger_function()
 _:ginger_bin()
 {
   shit() { _:gt_error_n "i cant find executable: ${1} " ; }
+  if [[ -d ${HOME}/.local/bin ]]; then
+    #// workaround for gentoo, wher esome stuff (pip install --user XXX) is installed
+    #// in local directory for an user. ginger is read before path is amended so it fails to find it
+    PATH="${PATH}:${HOME}/.local/bin"
+  fi
   if [[ ! -f ${1} ]]; then
     if ! which ${1} &>/dev/null ; then
       shit ${1} ; return 1;

@@ -112,9 +112,10 @@ separator_n
     cp -r ${WHEREAMI}/core                   ${GINGER_INSTALL_DIR}/.ginger/ 2>/dev/null
     cp -r ${WHEREAMI}/cron                   ${GINGER_INSTALL_DIR}/.ginger/ 2>/dev/null
     cp -r ${WHEREAMI}/systemd                ${GINGER_INSTALL_DIR}/.ginger/ 2>/dev/null
-    cp    ${WHEREAMI}/init 	               ${GINGER_INSTALL_DIR}/.ginger/init
+    cp    ${WHEREAMI}/init 	                 ${GINGER_INSTALL_DIR}/.ginger/init
 #    cp    ${WHEREAMI}/core/databases/gdb.src ${GINGER_INSTALL_DIR}/.ginger/core/databases/.gdb.src # todo fixit
     _:gt_notify_n "..."
+    # lets fix and replace the bashrc info
     if [[ -f ${HOME}/.bashrc ]]; then
         sed -i '1d'                                                   ${HOME}/.bashrc
 	    sed -i '/.*#GCA#.*/d'                                         ${HOME}/.bashrc

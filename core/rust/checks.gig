@@ -1,0 +1,13 @@
+#!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+if ! _:ginger_bin find ; then return 1; fi
+if ! _:ginger_bin cargo ; then return 1; fi
+#######################################
+
+function rustcheck_clippy() {
+    find . | grep "\.rs$" | grep -v "\./target/" | xargs touch ; cargo clippy --locked --all-features -- -D warnings
+}
+
+function rustcheck_fmt() {
+    cargo fmt -- --check
+}

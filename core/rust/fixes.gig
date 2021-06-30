@@ -1,0 +1,9 @@
+#!/bin/bash
+if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
+if ! _:ginger_bin find ; then return 1; fi
+if ! _:ginger_bin cargo ; then return 1; fi
+#######################################
+
+function rustfix_fmt() {
+    cargo fmt
+}
