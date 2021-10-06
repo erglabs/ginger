@@ -1,0 +1,30 @@
+#!/bin/bash
+# GINGER::destination ~/.config/user-dirs.dirs
+
+function __xdg_recreate_single() {
+  [[ ! -d "$@" ]] &&   echo "xdg::recreating $@" && mkdir -p "$@" &>/dev/null
+}
+
+XDG_DESKTOP_DIR="$HOME/.workspace"
+__xdg_recreate_single "${XDG_DESKTOP_DIR}"
+
+XDG_DOCUMENTS_DIR="$HOME/.media/docs"
+__xdg_recreate_single "${XDG_DOCUMENTS_DIR}"
+
+XDG_DOWNLOAD_DIR="$HOME/.downloads"
+__xdg_recreate_single "${XDG_DOWNLOAD_DIR}"
+
+XDG_MUSIC_DIR="$HOME/.media/music"
+__xdg_recreate_single "${XDG_MUSIC_DIR}"
+
+XDG_PICTURES_DIR="$HOME/.media/graphics/pic"
+__xdg_recreate_single "${XDG_PICTURES_DIR}"
+
+XDG_PUBLICSHARE_DIR="$HOME/.workspace/shared"
+__xdg_recreate_single "${XDG_PUBLICSHARE_DIR}"
+
+XDG_TEMPLATES_DIR="$HOME/.workspace/templates"
+__xdg_recreate_single "${XDG_TEMPLATES_DIR}"
+
+XDG_VIDEOS_DIR="$HOME/.media/video"
+__xdg_recreate_single "${XDG_VIDEOS_DIR}"

@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ ! -z ${GDBG} ]] ; then
+  set -x
+fi
 
 echo ' '
 echo ' >>> ginger is warming up!'
@@ -84,7 +87,7 @@ _:gt_notify_n 'this is just a test, it will not do anything, besides testing net
 _:gt_notify_n 'this may be used in future, but we will notify you of that!'
 blankline
 
-if ynquestion "Can I would like to test network connectivity to google DNS..." ; then
+if ynquestion "I would like to test network connectivity to google DNS... can i? " ; then
     _:gt_notify_n 'trying to connect to network!'
     _:gt_notify_n 'using google dns!'
 
@@ -97,6 +100,44 @@ if ynquestion "Can I would like to test network connectivity to google DNS..." ;
 else
     _:gt_status_n 'okay!'
 fi
+
+separator_n
+_:gt_notify_n "as ginger is installed usually once during system provisioning"
+_:gt_notify_n "i would like to use that to download some basic software for you"
+_:gt_notify_n "this step is fully optional, and here is a list of stuff you can choose"
+_:gt_notify_n '::::::::::::::::::::::::::::::::::::::::::::::'
+_:gt_notify_n "-> sublime-text 4 .... (dev)(x86-64) <- needs licence"
+_:gt_notify_n "-> firefox beta   .... (en_US)(x64)"
+_:gt_notify_n '::::::::::::::::::::::::::::::::::::::::::::::'
+
+if [[ ! -d "${HOME}/.pack" ]] ; then mkdir "${HOME}/.pack" ; fi
+if [[ ! -d "${HOME}/.bin" ]] ; then mkdir "${HOME}/.bin" ; fi
+if [[ ! -d "${HOME}/.archive" ]] ; then mkdir "${HOME}/.archive" ; fi
+
+blankline
+unset _additional_soft
+if ynquestion "I want to install mentioned additional software (goto choice menu)" ; then
+  _additional_soft=1
+fi
+
+    if [[ ! -z ${_additional_soft} ]] &&  ynquestion '>>: sublime text 4 (dev)' ; then
+  	  wget --no-clobber -q --show-progress -P "${HOME}/.archive/" $(curl -s https://www.sublimetext.com/dev  | grep -oP '(?<=")(https://download\.sublimetext\.com/sublime_text_build_.*_x64\.tar\.xz)(?=")')
+  	  # wget -q --show-progress -P "${HOME}/.archive/" $(curl -s https://www.sublimetext.com/dev  | grep -oP '(?<=")(https://download\.sublimetext\.com/sublime-text-.*\.tar\.xz)(?=")' | grep aarch64)
+      archive_file=$(ls -l "${HOME}/.archive" | grep -oP "sublime_text_build_.+\_x64.tar.xz" | tail -1)
+	  tar -C "${HOME}/.pack" -axvf "${HOME}/.archive/${archive_file}"
+	  cp "${WHEREAMI}/preconfig/executors/subl" "${HOME}/.bin/"
+	  blankline
+    fi
+    if [[ ! -z ${_additional_soft} ]] && ynquestion '>>: firefox (en_US)(x64)' ; then
+      ff_version=$(curl -q https://download-installer.cdn.mozilla.net/pub/firefox/releases/ 2>/dev/null | grep -oP "[0-9]{2,3}\.[0-9]{1,3}[b]?[0-9]?" | tail -1)
+	  wget -nc -q --show-progress -P "${HOME}/.archive/" https://download-installer.cdn.mozilla.net/pub/firefox/releases/${ff_version}/linux-x86_64/en-US/firefox-${ff_version}.tar.bz2
+      archive_file=$(ls -l "${HOME}/.archive" | grep -oP "firefox.+\.tar.bz2" | tail -1)
+	  tar -C "${HOME}/.pack" -axvf "${HOME}/.archive/${archive_file}"
+	  # rm -rf "${HOME}/.pack/firefox"
+	  cp "${WHEREAMI}/preconfig/executors/firefox" "${HOME}/.bin/"
+	  blankline
+    fi
+unset _additional_soft
 
 ## actual instalation start here
 ## prepare dirctories and copy content
@@ -115,23 +156,30 @@ separator_n
     cp    ${WHEREAMI}/init 	                 ${GINGER_INSTALL_DIR}/.ginger/init
 #    cp    ${WHEREAMI}/core/databases/gdb.src ${GINGER_INSTALL_DIR}/.ginger/core/databases/.gdb.src # todo fixit
     _:gt_notify_n "..."
+
+    # lets see if bashrc is available and fix it if its not there
+    if [[ ! -f "${HOME}/.bashrc" ]]; then
+        _:gt_warn_n "copied default bashrc"
+        cp "${WHEREAMI}/preconfig/bashrc" "${HOME}/.bashrc"
+    fi
+
     # lets fix and replace the bashrc info
-    if [[ -f ${HOME}/.bashrc ]]; then
+    if [[ -f "${HOME}/.bashrc" ]]; then
         sed -i '1d'                                                   ${HOME}/.bashrc
-	    sed -i '/.*#GCA#.*/d'                                         ${HOME}/.bashrc
+        sed -i '/.*#GCA#.*/d'                                         ${HOME}/.bashrc
         sed -i "1i#!/bin/bash"                                        ${HOME}/.bashrc
         sed -i '2icase $- in *i*) ;; *) return;; esac #GCA#'          ${HOME}/.bashrc
-	    sed -i "3iGINGER_HOME=${GINGER_INSTALL_DIR} #GCA#"            ${HOME}/.bashrc
-	    sed -i "4isource ${GINGER_INSTALL_DIR}/.ginger/init #GCA#"    ${HOME}/.bashrc
+        sed -i "3iGINGER_HOME=${GINGER_INSTALL_DIR} #GCA#"            ${HOME}/.bashrc
+        sed -i "4isource ${GINGER_INSTALL_DIR}/.ginger/init #GCA#"    ${HOME}/.bashrc
+        _:gt_notify_n "Ginger Core ready!"
     else
         _:gt_error_n "FAILED TO INSTALL! .bashrc not present in default directory!"
-        rm -ir ${GINGER_INSTALL_DIR/.ginger}
+        [[ -d ${GINGER_INSTALL_DIR}/.ginger ]] && rm -ir ${GINGER_INSTALL_DIR}/.ginger
         _:gt_error_n "scrapping changes!"
     fi
-    _:gt_notify_n "Ginger Core ready!"
 
 separator_n
-if ynquestion "[FEATURE INSTALL] I would like to start provisioning of user configurations" ; then
+if ynquestion "[FEATURE INSTALL] I would like to start user configurations provisioning" ; then
     source ${WHEREAMI}/preconfig/handler.gig
 fi
 ## todo if exist update
@@ -152,6 +200,12 @@ if ynquestion "[FEATURE INSTALL] I would like to install fuzzy tool" ; then
     fi
 fi
 
+separator_n
+if ynquestion "[FEATURE INSTALL] I would like to install userspace rust toolchain" ; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+fi
+
+
 if false ; then # todo: if git not exist provide it from ginger
 https://github.com/junegunn/fzf.git
     if [[ ! -f ${HOME}/.fzf ]]; then
@@ -164,12 +218,13 @@ https://github.com/junegunn/fzf.git
     fi
 fi
 
+
 separator_n
 _:gt_notify_n "ok, we are finished here, it should work on next console spawn!"
 _:gt_notify_n "thanks for using my stuff!"
 _:gt_notify_n "best regards"
 _:gt_notify_n "esavier  ...| ergLabs team"
-_:gt_notify_n "kmalco  ....| ergLabs team"
+_:gt_notify_n "kvexel  ....| ergLabs team"
 _:gt_notify_n "qc  ........| ergLabs team"
 _:gt_notify_n "usego_  ....| ergLabs team"
 _:gt_notify_n "daizy  .....| contributor "

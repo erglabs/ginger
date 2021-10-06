@@ -1,7 +1,9 @@
 #!/bin/bash
 if ! _:ginger_bin ssh-agent ; then return 1; fi
 if [[ ! -z ${GDEBUG} ]] ;then set -x ; fi
-__SSH_ENV="$HOME/.ssh/environment"
+__SSH_ENV_DIR="${HOME}/.ssh"
+__SSH_ENV="${HOME}/.ssh/environment"
+__SSH_SOCKET_DIR="${HOME}/.ssh/socket"
 
 # functions starting with _: should not be used by user
 # this script is mentioned to be run within bashrc once per session
@@ -13,14 +15,26 @@ function _:g_load_agent {
 
 function _:g_start_agent {
     echo -n "SSH agent does not exist or defunct, restarting..."
+    if [[ -d ${__SSH_ENV} ]] ; then rm -rf "${_SSH_ENV}" ; fi
+    mkdir -p "${__SSH_ENV_DIR}"
     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${__SSH_ENV}"
-    echo "succeeded"
     chmod 600 "${__SSH_ENV}"
 }
 
 # create parent dirs if not exist
-if [[ ! -d ${__SSH_ENV} ]]; then
-    mkdir -p "${__SSH_ENV}" &>/dev/null
+if [[ ! -d ${__SSH_ENV_DIR} ]]; then
+    mkdir -p "${__SSH_ENV_DIR}" &>/dev/null
+fi
+
+# if environment is mistakenly an dir
+if [[ -d ${__SSH_ENV} ]]; then
+    rm -rf ${__SSH_ENV}
+    mkdir -p "${__SSH_ENV_DIR}" &>/dev/null
+    touch ${__SSH_ENV}
+fi
+
+if [[ ! -d "${__SSH_SOCKET_DIR}" ]]; then
+    mkdir -p "${__SSH_SOCKET_DIR}" &>/dev/null
 fi
 
 # if not exist create, usually it should

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ ! -d ${HOME}/.pack ]]
+then
+	echo "${HOME}/.pack folder is missing"
+elif [[ ! -f ${HOME}/.pack/sublime_text/sublime_text ]] 
+then
+	echo 'missing sublime text installation in ~/.pack'
+else
+	nohup ${HOME}/.pack/sublime_text/sublime_text $@ &>/dev/null &
+fi
+

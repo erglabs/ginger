@@ -1,0 +1,242 @@
+
+!|
+!| File    : ~/.Xresources
+!| Author  : Fabien Cazenave
+!| Source  : https://github.com/fabi1cazenave/dotFiles
+!| Licence : WTFPL
+!|
+!| Default X settings for XTerm & URxvt, apply with:
+!|   xrdb -load ~/.Xresources
+!|
+
+
+! size matters
+*saveLines : 32767
+
+! anti-aliasing
+Xft*antialias : true
+Xft*hinting   : 1
+Xft*dpi       : 142
+
+
+!|    XTerm >> all VTE-based terminals                                      <<<
+!|=============================================================================
+
+!xterm*font: -*-terminus-*-*-*-*-*-*-*-*-*-*-iso10646-*
+!xterm*boldFont: -*-terminus-*-*-*-*-*-*-*-*-*-*-iso10646-*
+!xterm*italicFont: -*-terminus-*-*-*-*-*-*-*-*-*-*-iso10646-*
+!xterm*font: -misc-fixed-medium-r-JetBrains Mono-*-18-*-*-*-*-*-*-*
+!xterm*boldFont: -misc-fixed-medium-r-JetBrains Mono-*-18-*-*-*-*-*-*-*
+
+! Very surprising that now neglecting to specify font still renders
+! perfect misc-fixed font. Oh, it’s so lovely.
+!xterm*font: -*-*-*-*-*-*-*-100-*-*-*-60-iso10646-*
+!xterm*boldFont: -*-*-*-*-*-*-*-100-*-*-*-60-iso10646-*
+!xterm*italicFont: -*-*-*-*-*-*-*-100-*-*-*-60-iso10646-*
+
+XTerm.vt100.faceName: Fira Code:size=11:antialias=true
+XTerm.vt100.font: 7x13
+URxvt.font: xft:Fira Code:size=12,xft:Noto Color Emoji:size=9,xft:Unifont:pixelsize=12,-*-unifont-*-*-*-*-*-*-*-*-*-*-*-*
+
+
+! let’s be 8bit-clean
+XTerm*utf8            : 1
+XTerm*eightBitInput   : false
+XTerm*eightBitControl : false
+XTerm*eightBitOutput  : true
+
+! disable fullscreen on <Alt-Return>
+XTerm*fullscreen      : never
+XTerm*omitTranslation : fullscreen
+
+!>>>
+
+xterm*scrollBar: false
+
+
+!|    URxvt über alles                                                      <<<
+!|=============================================================================
+
+URxvt*loginShell      : true
+URxvt*scrollBar       : false
+URxvt*scrollBar_right : false
+URxvt*transparent     : false
+URxvt*shading         : 40
+URxvt*cursorBlink     : true
+
+! notify the WM when the bell rings
+URxvt*urgentOnBell    : true
+
+! proper font rendering:
+! the “letterSpace” option is absolutely required to keep the text readable
+! (problem: wide characters like ←→ might become unreadable… :-/)
+URxvt*letterSpace     : -2
+!URxvt*font            : xft:mensch:size=9
+URxvt*font            : xft:fira:size=9
+!URxvt*font            : xft:Inconsolata:size=11
+!URxvt*font            : xft:Inconsolata-Awesome:size=11
+
+! not sure these fonts work at all…
+!URxvt*letterSpace     : -5
+!URxvt*font            : xft:monaco:size=9
+!URxvt*font            : xft:pomicons:size=9
+
+! reclaim <Alt-s> and <Ctrl-Shift-*> shortcuts
+URxvt*searchable-scrollback: M-S-s
+URxvt*iso14755        : false
+URxvt*iso14755_52     : false
+
+
+URxvt.perl-ext: default,url-select
+URxvt.keysym.C-M-u: perl:url-select:select_next
+URxvt.url-select.launcher: /usr/bin/xdg-open
+URxvt.url-select.underline: true
+XTerm.vt100.backarrowKey: false
+XTerm.vt100.locale: true
+XTerm.ttyModes: erase ^?
+
+
+
+!Make 'Alt' key behave as on other terminal emulators
+
+!The default Alt key behavior in xterm is a modifier to send eight bit input characters e.g. to insert æ by pressing Alt+f. To make Alt instead send a ^[ (escape) key (as in gnome-terminal and konsole), set
+XTerm.vt100.metaSendsEscape: true
+XTerm.termName: xterm-256color
+URxvt.termName: xterm-256color
+
+!bell stuff
+URxvt.mapAlert:     true
+URxvt.urgentOnBell: true
+URxvt.visualBell:   false
+
+
+xscreensaver.splash: false
+
+!font settings
+!xscreensaver.Dialog.headingFont:        -*-georgia-bold-r-*-*-18-*-*-*-*-*-*-*
+!xscreensaver.Dialog.bodyFont:           -*-georgia-medium-r-*-*-18-*-*-*-*-*-*-*
+!xscreensaver.Dialog.labelFont:          -*-georgia-medium-r-*-*-18-*-*-*-*-*-*-*
+!xscreensaver.Dialog.unameFont:          -*-georgia-medium-r-*-*-18-*-*-*-*-*-*-*
+!xscreensaver.Dialog.buttonFont:         -*-georgia-bold-r-*-*-18-*-*-*-*-*-*-*
+!xscreensaver.Dialog.dateFont:           -*-georgia-medium-r-*-*-18-*-*-*-*-*-*-*
+!xscreensaver.passwd.passwdFont:         -*-georgia-bold-r-*-*-18-*-*-*-*-*-*-*
+
+!general dialog box (affects main hostname, username, password text)
+xscreensaver.Dialog.foreground:         #8E8463
+xscreensaver.Dialog.background:         #161510
+xscreensaver.Dialog.topShadowColor:     #161510
+xscreensaver.Dialog.bottomShadowColor:  #161510
+xscreensaver.Dialog.Button.foreground:  #8E8463
+xscreensaver.Dialog.Button.background:  #4C4635
+
+!username/password input box and date text colour
+xscreensaver.Dialog.text.foreground:    #8E8463
+xscreensaver.Dialog.text.background:    #161510
+xscreensaver.Dialog.internalBorderWidth:36
+xscreensaver.Dialog.borderWidth:        0
+xscreensaver.Dialog.shadowThickness:    2
+
+!timeout bar (background is actually determined by Dialog.text.background)
+xscreensaver.passwd.thermometer.foreground:  #727A18
+xscreensaver.passwd.thermometer.background:  #161510
+xscreensaver.passwd.thermometer.width:       10
+
+!datestamp format--see the strftime(3) manual page for details
+xscreensaver.dateFormat:    %I:%M%p - %a %b %d, %Y
+
+Rxvt.keysym.C-M-f: perl:fullscreen:switch
+
+!!! nobody wants to see your scrollbar
+URxvt.scrollBar: false
+
+
+! make Alt-arrow work
+URxvt.keysym.M-Up     : \033[1;3A
+URxvt.keysym.M-Down   : \033[1;3B
+URxvt.keysym.M-Right  : \033[1;3C
+URxvt.keysym.M-Left   : \033[1;3D
+URxvt.keysym.M-Prior  : \033[5;3~
+URxvt.keysym.M-Next   : \033[6;3~
+URxvt.keysym.M-End    : \033[1;3F
+URxvt.keysym.M-Home   : \033[1;3H
+
+! make Ctrl-arrow work
+URxvt.keysym.C-Up     : \033[1;5A
+URxvt.keysym.C-Down   : \033[1;5B
+URxvt.keysym.C-Right  : \033[1;5C
+URxvt.keysym.C-Left   : \033[1;5D
+URxvt.keysym.C-Prior  : \033[5;5~
+URxvt.keysym.C-Next   : \033[6;5~
+URxvt.keysym.C-End    : \033[1;5F
+URxvt.keysym.C-Home   : \033[1;5H
+
+! extensions (+ disable the selection popup)
+URxvt.perl-ext-common : default,matcher,clipboard,font-size,-selection-popup
+
+! extensions -> matcher: open URL with a left click
+URxvt.urlLauncher     : xdg-open
+URxvt.url-launcher    : xdg-open
+URxvt.matcher.button  : 1
+
+! extensions -> clipboard (requires xsel)
+! https://github.com/muennich/urxvt-perls
+URxvt.keysym.C-C      : perl:clipboard:copy
+URxvt.keysym.C-V      : perl:clipboard:paste
+URxvt.keysym.C-M-v    : perl:clipboard:paste_escaped
+
+! extensions -> font-size
+! https://github.com/majutsushi/urxvt-font-size
+URxvt.keysym.C-equal  : perl:font-size:increase
+URxvt.keysym.C-minus  : perl:font-size:decrease
+
+!>>>
+
+!|    Kalahari color theme                                                  <<<
+!|=============================================================================
+
+*fading      : 40
+*fadeColor   : #002233
+*cursorColor : #aa2222
+*background  : #222222
+*foreground  : #eeeedd
+!*pointerColorForeground: #93a1a1
+!*pointerColorBackground: #586e75
+
+! 0: black
+*color0  : #000000
+*color8  : #666666
+
+! 1: red
+*color1  : #cc7777
+*color9  : #cf6171
+
+! 2: green
+*color2  : #00cd00
+*color10 : #c5f779
+
+! 3: yellow
+*color3  : #ffbb66
+*color11 : #fff796
+
+! 4: blue
+*color4  : #22aa99
+*color12 : #bbbbff
+
+! 5: magenta
+*color5  : #ff66cc
+*color13 : #f935f9
+
+! 6: cyan
+*color6  : #88bbbb
+*color14 : #14f0f0
+
+! 7: white
+*color7  : #eeeedd
+*color15 : #ffffee
+
+!>>>
+
+Xcursor.theme : Vanilla-DMZ-AA
+Xcursor.size  : 22
+
+! vim: set fdm=marker fmr=<<<,>>> fdl=0:

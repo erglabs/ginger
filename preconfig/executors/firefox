@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ ! -d ${HOME}/.pack ]]
+then
+	echo "${HOME}/.pack folder is missing"
+elif [[ ! -f ${HOME}/.pack/firefox/firefox ]] 
+then
+	echo 'missing firefox installation in ~/.pack'
+else
+	nohup ${HOME}/.pack/firefox/firefox &>/dev/null &
+fi
+
