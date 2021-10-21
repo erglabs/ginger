@@ -16,7 +16,7 @@
 ! anti-aliasing
 Xft*antialias : true
 Xft*hinting   : 1
-Xft*dpi       : 175
+Xft*dpi       : 142
 
 
 !|    XTerm >> all VTE-based terminals                                      <<<
@@ -107,7 +107,7 @@ URxvt.termName: xterm-256color
 !bell stuff
 URxvt.mapAlert:     true
 URxvt.urgentOnBell: true
-URxvt.visualBell:   false
+URxvt.visualBell:   true
 
 
 xscreensaver.splash: false
@@ -194,77 +194,45 @@ URxvt.keysym.C-minus  : perl:font-size:decrease
 !|    Kalahari color theme                                                  <<<
 !|=============================================================================
 
-!! *fading      : 40
-!! *fadeColor   : #002233
-!! *cursorColor : #aa2222
-!! *background  : #222222
-!! *foreground  : #eeeedd
-!! !*pointerColorForeground: #93a1a1
-!! !*pointerColorBackground: #586e75
-!! 
-!! ! 0: black
-!! *color0  : #000000
-!! *color8  : #666666
-!! 
-!! ! 1: red
-!! *color1  : #cc7777
-!! *color9  : #cf6171
-!! 
-!! ! 2: green
-!! *color2  : #00cd00
-!! *color10 : #c5f779
-!! 
-!! ! 3: yellow
-!! *color3  : #ffbb66
-!! *color11 : #fff796
-!! 
-!! ! 4: blue
-!! *color4  : #22aa99
-!! *color12 : #bbbbff
-!! 
-!! ! 5: magenta
-!! *color5  : #ff66cc
-!! *color13 : #f935f9
-!! 
-!! ! 6: cyan
-!! *color6  : #88bbbb
-!! *color14 : #14f0f0
-!! 
-!! ! 7: white
-!! *color7  : #eeeedd
-!! *color15 : #ffffee
+*fading      : 40
+*fadeColor   : #002233
+*cursorColor : #aa2222
+*background  : #222222
+*foreground  : #eeeedd
+!*pointerColorForeground: #93a1a1
+!*pointerColorBackground: #586e75
 
-!#### added
-!*background:            #272827
-!*foreground:            #657b83
-*fading:                15
-*fadeColor:             black
-*cursorColor:           #16A085
-*pointerColorBackground:#2B2C2B
-*pointerColorForeground:#16A085
+! 0: black
+*color0  : #000000
+*color8  : #666666
 
-URxvt.internalBorder: 6
+! 1: red
+*color1  : #cc7777
+*color9  : #cf6171
 
-*foreground: #EAD49B
-*background: #1E272B
-*cursor: #EAD49B
-*color0: #1E272B
-*color1: #685742
-*color2: #9D6A47
-*color3: #B36D43
-*color4: #78824B
-*color5: #D99F57
-*color6: #C9A554
-*color7: #EAD49B
-*color9: #685742
-*color10: #9D6A47
-*color11: #B36D43
-*color12: #78824B
-*color13: #D99F57
-*color14: #C9A554
-*color15: #EAD49B
-*color8: #666666
-!# added
+! 2: green
+*color2  : #00cd00
+*color10 : #c5f779
+
+! 3: yellow
+*color3  : #ffbb66
+*color11 : #fff796
+
+! 4: blue
+*color4  : #22aa99
+*color12 : #bbbbff
+
+! 5: magenta
+*color5  : #ff66cc
+*color13 : #f935f9
+
+! 6: cyan
+*color6  : #88bbbb
+*color14 : #14f0f0
+
+! 7: white
+*color7  : #eeeedd
+*color15 : #ffffee
 
 !>>>
 

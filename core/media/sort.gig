@@ -1,0 +1,136 @@
+#!/bin/bash
+if ! _:ginger_bin youtube-dl ; then return 1; fi
+############################################
+
+function _:g_copy_per_dir_orig() {
+  if [[ -z "${1}" ]]
+  then
+    echo 'no suffix $1 provided'
+    return
+  else SUFFIX="${1}"
+  fi
+
+  if [[ -z "${2}" ]]
+  then
+    echo 'no target $2 provided'
+    return
+  else TARGET="${2}"
+  fi
+
+  if [[ ! -d "${2}" ]]
+  then
+    echo 'no target directory'
+    return
+  fi
+
+}
+
+function _:g_copy_per_dir() {
+  if [[ -z "${1}" ]]
+  then
+    echo 'no suffix $1 provided'
+    return
+  else SUFFIX="${1}"
+  fi
+
+  if [[ -z "${2}" ]]
+  then
+    echo 'no target $2 provided'
+    return
+  else TARGET="${2}"
+  fi
+
+  if [[ ! -d "${2}" ]]
+  then
+    echo 'no target directory'
+    return
+  fi
+
+  if ls ${HOME}/*.${SUFFIX} &>/dev/null ; then
+    mv ${HOME}/*.${SUFFIX} "${TARGET}"
+  fi
+  
+  if ls ${HOME}/.downloads/*.${SUFFIX} &>/dev/null ; then
+    mv ${HOME}/.downloads/*.${SUFFIX} "${TARGET}"
+  fi
+
+  if ls ${HOME}/Downloads/*.${SUFFIX} &>/dev/null ; then
+    mv ${HOME}/Downloads/*.${SUFFIX} "${TARGET}"
+  fi
+  
+
+
+  # debug:
+  # echo ${HOME}/*.${SUFFIX} "${TARGET}"
+  # for each in $(ls ${HOME}/*.${SUFFIX} 2>/dev/null); do
+  #   echo $each
+  # done
+  #   echo ${HOME}/Downloads/*.${SUFFIX} "${TARGET}"
+  # for each in $(ls ${HOME}/Downloads/*.${SUFFIX} 2>/dev/null ); do
+  #   echo $each
+  # done
+  #   echo ${HOME}/.downloads/*.${SUFFIX} "${TARGET}"
+  # for each in $(ls ${HOME}/.downloads/*.${SUFFIX} 2>/dev/null); do
+  #   echo $each
+  # done
+}
+
+
+function sort_home_media()
+{
+  if [[ -d ${XDG_DOCUMENTS_DIR} ]] ; then
+    mkdir -p "${XDG_DOCUMENTS_DIR}/todo"
+    _:g_copy_per_dir pdf  "${XDG_DOCUMENTS_DIR}/todo"
+    _:g_copy_per_dir doc  "${XDG_DOCUMENTS_DIR}/todo"
+    _:g_copy_per_dir xls  "${XDG_DOCUMENTS_DIR}/todo"
+    _:g_copy_per_dir xslx "${XDG_DOCUMENTS_DIR}/todo"
+    _:g_copy_per_dir txt  "${XDG_DOCUMENTS_DIR}/todo"
+    _:g_copy_per_dir md   "${XDG_DOCUMENTS_DIR}/todo"
+  fi
+
+  if [[ -d ${XDG_DOCUMENTS_DIR} ]] ; then
+    mkdir -p "${XDG_MUSIC_DIR}/todo"
+    _:g_copy_per_dir ogg  "${XDG_MUSIC_DIR}/todo"
+    _:g_copy_per_dir m4a  "${XDG_MUSIC_DIR}/todo"
+    _:g_copy_per_dir opus "${XDG_MUSIC_DIR}/todo"
+    _:g_copy_per_dir aac  "${XDG_MUSIC_DIR}/todo"
+    _:g_copy_per_dir wav  "${XDG_MUSIC_DIR}/todo"
+    _:g_copy_per_dir mp3  "${XDG_MUSIC_DIR}/todo"
+  fi
+
+  if [[ -d ${XDG_DOCUMENTS_DIR} ]] ; then
+    mkdir -p "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir gif  "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir jpeg "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir jpg  "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir tiff "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir bmp  "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir png  "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir raw  "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir webp "${XDG_PICTURES_DIR}/todo"
+
+    _:g_copy_per_dir 'gif?*'  "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir 'jpeg?*' "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir 'jpg?*'  "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir 'tiff?*' "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir 'bmp?*'  "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir 'png?*'  "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir 'raw?*'  "${XDG_PICTURES_DIR}/todo"
+    _:g_copy_per_dir 'webp?*' "${XDG_PICTURES_DIR}/todo"
+  fi
+
+  if [[ -d ${XDG_DOCUMENTS_DIR} ]] ; then
+    mkdir -p "${XDG_VIDEOS_DIR}/todo"
+    _:g_copy_per_dir mov  "${XDG_VIDEOS_DIR}/todo"
+    _:g_copy_per_dir webm "${XDG_VIDEOS_DIR}/todo"
+    _:g_copy_per_dir mp4  "${XDG_VIDEOS_DIR}/todo"
+    _:g_copy_per_dir avi  "${XDG_VIDEOS_DIR}/todo"
+    _:g_copy_per_dir flv  "${XDG_VIDEOS_DIR}/todo"
+  fi
+
+
+}
+
+
+
+

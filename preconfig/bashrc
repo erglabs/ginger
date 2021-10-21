@@ -1,6 +1,6 @@
 #!/bin/bash
 case $- in *i*) ;; *) return;; esac #GCA#
-GINGER_HOME="${HOME}/.ginger" #GCA#
+GINGER_HOME="${HOME}" #GCA#
 source "${HOME}/.ginger/init" #GCA#
 
 TZ='Europe/Warsaw'; export TZ
@@ -23,79 +23,40 @@ shopt -s globstar
 
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-if [ -f /etc/bash_completion.d/gentoo-style-init ];
+## todo debian based one ?
+# if [ -f /etc/bash_completion ]
+# then
+#   . /etc/bash_completion
+# fi
+
+if [ -f /etc/bash_completion.d/gentoo-style-init ]
 then
-	. /etc/bash_completion.d/gentoo-style-init
+  . /etc/bash_completion.d/gentoo-style-init
 fi
 
-function to () {
-  if test "$2"; then
-    cd "$(apparix --try-current-first -favour rOl "$1" "$2" || echo .)"
-  elif test "$1"; then
-    if test "$1" == '-'; then
-      cd -
-    else
-      cd "$(apparix --try-current-first -favour rOl "$1" || echo .)"
-    fi
-  else
-    cd $HOME
-  fi
-}
-function bm () {
-  if test "$2"; then
-    apparix --add-mark "$1" "$2";
-  elif test "$1"; then
-    apparix --add-mark "$1";
-  else
-    apparix --add-mark;
-  fi
-}
-function portal () {
-  if test "$1"; then
-    apparix --add-portal "$1";
-  else
-    apparix --add-portal;
-  fi
-}
-# function to generate list of completions from .apparixrc
-function _apparix_aliases ()
-{ cur=$2
-  dir=$3
-  COMPREPLY=()
-  nullglobsa=$(shopt -p nullglob)
-  shopt -s nullglob
-  if let $(($COMP_CWORD == 1)); then
-    # now cur=<apparix mark> (completing on this) and dir='to'
-    # Below will not complete on subdirectories. swap if so desired.
-    # COMPREPLY=( $( cat $HOME/.apparix{rc,expand} | grep "j,.*$cur.*," | cut -f2 -d, ) )
-    COMPREPLY=( $( (cat $HOME/.apparix{rc,expand} | grep "\<j," | cut -f2 -d, ; ls -1p | grep '/$' | tr -d /) | grep "\<$cur.*" ) )
-  else
-    # now dir=<apparix mark> and cur=<subdirectory-of-mark> (completing on this)
-    dir=`apparix --try-current-first -favour rOl $dir 2>/dev/null` || return 0
-    eval_compreply="COMPREPLY=( $(
-      cd "$dir"
-      \ls -d $cur* | while read r
-      do
-        [[ -d "$r" ]] &&
-        [[ $r == *$cur* ]] &&
-          echo \"${r// /\\ }\"
-      done
-    ) )"
-  eval $eval_compreply
-  fi
-  $nullglobsa
-  return 0
-}
-complete -F _apparix_aliases to
-alias to='(test "x-" =  "x\!*") && cd - || (test "x" !=  "x\!*") && cd `(apparix --try-current-first -favour rOl \!* || echo -n .)` || cd'
-alias bm='apparix --add-mark \!*'
-alias portal='apparix --add-portal \!*'
+if [ -f "${HOME}/.config/user-dirs.dirs" ]
+then
+  . "${HOME}/.config/user-dirs.dirs"
+fi
 
 #############
 # additions #
-#############
 
-TZ='Europe/Warsaw'; export TZ
+##############
+## directories
+if [[ -d ${HOME}/.cargo ]] && [[ -f ${HOME}/.cargo/env ]] ; then
+  PATH="${PATH}:${HOME}/.cargo/env"
+else
+  echo "rust:cargo is not installed or env file is not present"
+fi
+
+if [[ -d ${HOME}/.bin ]] ; then
+  PATH="${PATH}:${HOME}/.bin"
+fi
+
+
+##############
+## binaries and functors
 
 if type exa &>/dev/null ; then
   alias ls=exa
@@ -121,14 +82,6 @@ if [[ -d ${HOME}/.pack/kitty/kitty ]] ; then
   PATH="${PATH}:${HOME}/.pack/kitty/kitty"
 fi
 
-if [[ -d ${HOME}/.cargo ]] && [[ -f ${HOME}/.cargo/env ]] ; then
-  PATH="${PATH}:${HOME}/.cargo/env"
-else
-  echo "rust:cargo is not installed or env file is not present"
-fi
-
-if [[ -d ${HOME}/.bin ]] ; then
-  PATH="${PATH}:${HOME}/.bin"
-fi
+. ${HOME}/.bash.z
 
 _devshortprompt

@@ -13,3 +13,7 @@ MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 . ${MYDIR}/preconfig.i3.sh
 . ${MYDIR}/preconfig.rofi.sh
 . ${MYDIR}/preconfig.emacs.sh
+. ${MYDIR}/preconfig.bashrc.sh
+. ${MYDIR}/preconfig.bash.z.sh
+. ${MYDIR}/preconfig.user-dirs.sh
+. ${MYDIR}/preconfig.xresources.sh
